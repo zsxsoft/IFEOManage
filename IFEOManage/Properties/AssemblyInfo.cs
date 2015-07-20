@@ -10,9 +10,9 @@ using System.Windows;
 [assembly: AssemblyTitle("IFEOManage")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
+[assembly: AssemblyCompany("http://www.zsxsoft.com")]
 [assembly: AssemblyProduct("IFEOManage")]
-[assembly: AssemblyCopyright("Copyright ©  2015")]
+[assembly: AssemblyCopyright("Powered by zsx")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

@@ -21,6 +21,7 @@
     <!-- Main Window Start  -->
     <s:String x:Key="MainWindowTitle">IFEOManage</s:String>
     <s:String x:Key="cfmNotFound">可执行文件不存在</s:String>
+    <s:String x:Key="msgConfirm">确定要删除吗？</s:String>
     
     <!-- Detail Start -->
     <s:String x:Key="DetailTitle">映像劫持信息调整</s:String>

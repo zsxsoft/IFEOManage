@@ -40,12 +40,23 @@ namespace IFEOManage
 
         private void mnuModify_Click(object sender, RoutedEventArgs e)
         {
-
+            Detail WindowDetail = new Detail();
+            WindowDetail.Data.ID = listView.SelectedIndex;
+            WindowDetail.Show();
         }
 
         private void mnuDelete_Click(object sender, RoutedEventArgs e)
         {
+            List<int> SelectedItems = new List<int>();
+            List<IFEOItem> Items = listView.SelectedItems.Cast<IFEOItem>().ToList();
 
+            MessageBoxResult Result = MessageBox.Show((string)FindResource("msgConfirm"), this.Title, MessageBoxButton.YesNo, MessageBoxImage.Question, MessageBoxResult.No);
+            
+            if (Result == MessageBoxResult.Yes)
+            {
+                IFEO.Delete(Items);
+            }
+            
         }
     }
 }

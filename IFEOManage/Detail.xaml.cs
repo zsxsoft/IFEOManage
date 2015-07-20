@@ -54,7 +54,16 @@ namespace IFEOManage
             set
             {
                 if (_id == value) return;
-                _id = value;
+
+                if (IFEO.Items.Count > value)
+                {
+                    _id = value;
+                    IFEOItem Item = IFEO.Items[_id];
+                    this.PEPath = Item.PEName;
+                    this.DebuggerPath = Item.Debugger;
+                    this.ManageByThis = Item.ManageByThis;
+                }
+                
                 OnPropertyChanged(new PropertyChangedEventArgs("ID"));
             }
         }
