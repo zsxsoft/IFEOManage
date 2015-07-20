@@ -2,9 +2,22 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:local="clr-namespace:IFEOManage"
                     xmlns:s="clr-namespace:System;assembly=mscorlib">
+
+    <!-- Main Windows Start  -->
     <s:String x:Key="MainWindowTitle">IFEOManage</s:String>
-    <s:String x:Key="btnRefresh">刷新</s:String>
-    <s:String x:Key="btnAdd">新建</s:String>
-    <s:String x:Key="btnModify">修改</s:String>
-    <s:String x:Key="btnDelete">删除</s:String>
+    
+    <s:String x:Key="mnuRefresh">刷新</s:String>
+    <s:String x:Key="mnuAdd">新建</s:String>
+    <s:String x:Key="mnuModify">修改</s:String>
+    <s:String x:Key="mnuDelete">删除</s:String>
+    
+    
+    <s:String x:Key="lstPEName">可执行文件名</s:String>
+    <s:String x:Key="lstDebugger">指向文件</s:String>
+    <s:String x:Key="lstRemark">备注</s:String>
+    
+    <s:String x:Key="cfmNotFound">可执行文件不存在</s:String>
+    
+    <!-- Detail Start -->
+    <s:String x:Key="DetailTitle">映像劫持信息调整</s:String>
 </ResourceDictionary>

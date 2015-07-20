@@ -23,6 +23,28 @@ namespace IFEOManage
         public MainWindow()
         {
             InitializeComponent();
+            IFEO.Load();
+            this.listView.ItemsSource = IFEO.Items;//为ListView绑定数据源  
+        }
+
+        private void mnuAdd_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void mnuRefresh_Click(object sender, RoutedEventArgs e)
+        {
+            IFEO.Load();
+        }
+
+        private void mnuModify_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void mnuDelete_Click(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }

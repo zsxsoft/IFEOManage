@@ -5,36 +5,53 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:IFEOManage"
         mc:Ignorable="d"
-        Title="{DynamicResource MainWindowTitle}" Width="934">
+        Title="{DynamicResource MainWindowTitle}" Width="800" Height="400">
 
-    <Grid Grid.Row="1" Grid.Column="2" Margin="20">
+    <Grid Grid.Row="1" Grid.Column="1" Margin="20">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="200*"/>
-            <ColumnDefinition Width="50*"/>
+            <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
-        <ListView x:Name="listView"></ListView>
-        <GridSplitter Width="5"></GridSplitter>
-      
-            <Grid Grid.Row="4" Grid.Column="1">
+        <GridSplitter Width="30" Background="{x:Null}" Grid.Column="1">
+        </GridSplitter>
+        <ListView x:Name="listView">
+            <ListView.ContextMenu>
+                <ContextMenu>
+                    <MenuItem Header="{DynamicResource mnuRefresh}" Click="mnuRefresh_Click"/>
+                    <MenuItem Header="{DynamicResource mnuAdd}" Click="mnuAdd_Click"/>
+                    <MenuItem Header="{DynamicResource mnuModify}" Click="mnuModify_Click"/>
+                    <MenuItem Header="{DynamicResource mnuDelete}" Click="mnuDelete_Click"/>
+                </ContextMenu>
+            </ListView.ContextMenu>
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Header="{DynamicResource lstPEName}" Width="200" DisplayMemberBinding="{Binding Path=PEName}"></GridViewColumn>
+                    <GridViewColumn Header="{DynamicResource lstDebugger}" Width="200" DisplayMemberBinding="{Binding Path=Debugger}"></GridViewColumn>
+                    <GridViewColumn Header="{DynamicResource lstRemark}" Width="300" DisplayMemberBinding="{Binding Path=Remark}"></GridViewColumn>
+                </GridView>
+            </ListView.View>
+        </ListView>
+        <!--
+        <Grid Grid.Row="4" Grid.Column="2">
             <Grid.RowDefinitions>
                 <RowDefinition></RowDefinition>
                 <RowDefinition></RowDefinition>
                 <RowDefinition></RowDefinition>
                 <RowDefinition></RowDefinition>
             </Grid.RowDefinitions>
-            <Viewbox Grid.Row="0" >
-                <Button x:Name="btnRefresh" Content="{DynamicResource btnRefresh}" />
+            <Viewbox Grid.Row="0" Margin="0,10,0,10">
+                <Button x:Name="btnRefresh"  Content="{DynamicResource btnRefresh}" FontSize="2" />
             </Viewbox>
-            <Viewbox Grid.Row="1">
-                <Button x:Name="btnAdd" Content="{DynamicResource btnAdd}" />
+            <Viewbox Grid.Row="1" Margin="0,10,0,10">
+                <Button x:Name="btnAdd" Content="{DynamicResource btnAdd}" FontSize="2"  />
             </Viewbox>
-            <Viewbox Grid.Row="2">
-                <Button x:Name="btnModify" Content="{DynamicResource btnModify}" />
+            <Viewbox Grid.Row="2" Margin="0,10,0,10">
+                <Button x:Name="btnModify" Content="{DynamicResource btnModify}" FontSize="2"  />
             </Viewbox>
-            <Viewbox Grid.Row="3" >
-                <Button x:Name="btnDelete" Content="{DynamicResource btnDelete}" />
+            <Viewbox Grid.Row="3"  Margin="0,10,0,10">
+                <Button x:Name="btnDelete" Content="{DynamicResource btnDelete}" FontSize="2"  />
             </Viewbox>
         </Grid>
+-->
     </Grid>
 
 </Window>
