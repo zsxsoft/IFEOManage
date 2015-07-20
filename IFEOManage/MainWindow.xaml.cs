@@ -29,7 +29,8 @@ namespace IFEOManage
 
         private void mnuAdd_Click(object sender, RoutedEventArgs e)
         {
-
+            Window WindowDetail = new Detail();
+            WindowDetail.Show();
         }
 
         private void mnuRefresh_Click(object sender, RoutedEventArgs e)

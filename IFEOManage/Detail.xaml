@@ -5,8 +5,50 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:IFEOManage"
         mc:Ignorable="d"
-        Title="DetailTitle" Height="300" Width="300">
+        Title="{DynamicResource DetailTitle}" Width="600" Height="250">
+    <Window.Resources>
+        <local:InverseBooleanConverter x:Key="InverseBooleanConverter" />
+    </Window.Resources>
     <Grid>
-        
+        <Grid.RowDefinitions>
+            <RowDefinition></RowDefinition>
+            <RowDefinition></RowDefinition>
+            <RowDefinition></RowDefinition>
+            <RowDefinition></RowDefinition>
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="100"/>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="100"/>
+            </Grid.ColumnDefinitions>
+            <Label Grid.Column="0" Content="{DynamicResource lstPEName}" Margin="7,12,10,12"/>
+            <TextBox Grid.Column="1" x:Name="txtPEName" Margin="0,15,0,20" Text="{Binding Path=PEPath, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+            <Button Grid.Column="2" x:Name="btnOpenPESelector" Margin="5,14,5,20" Click="btnOpenPESelector_Click" >
+                <AccessText Text="{DynamicResource btnBrowse}"></AccessText>
+            </Button>
+        </Grid>
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="100"/>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="100"/>
+            </Grid.ColumnDefinitions>
+            <Label Grid.Column="0" Content="{DynamicResource lstDebugger}" Margin="7,12,10,12"/>
+            <TextBox Grid.Column="1" x:Name="txtDebugger" Margin="0,15,0,20" Text="{Binding Path=DebuggerPath, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding Path=IsChecked, ElementName=chkManageByThis, Converter={StaticResource InverseBooleanConverter}}"></TextBox>
+            <Button Grid.Column="2" x:Name="btnOpenDebuggerSelector" Margin="5,14,5,20" Click="btnOpenDebuggerSelector_Click"  IsEnabled="{Binding Path=IsChecked, ElementName=chkManageByThis, Converter={StaticResource InverseBooleanConverter}}">
+                <AccessText Text="{DynamicResource btnBrowse2}"></AccessText>
+            </Button>
+        </Grid>
+        <Grid Grid.Row="2">
+            <CheckBox x:Name="chkManageByThis" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" IsChecked="{Binding Path=ManageByThis}" Checked="chkManageByThis_Checked">
+                <AccessText Text="{DynamicResource chkManage}"></AccessText>
+            </CheckBox>
+        </Grid>
+        <Grid Grid.Row="3">
+            <Button x:Name="btnSave" HorizontalAlignment="Left" Margin="263,17,0,0" VerticalAlignment="Top" Width="75">
+                <AccessText Text="{DynamicResource btnSave}"></AccessText>
+            </Button>
+        </Grid>
     </Grid>
 </Window>

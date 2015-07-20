@@ -43,7 +43,7 @@ namespace IFEOManage
 
     public class IFEO
     {
-
+        public static string IFEOExecution = System.IO.Directory.GetCurrentDirectory() + "\\IEFOExecution.exe";
         private const string IFEORegPath = @"SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\";
         /// <summary>
         /// The items
