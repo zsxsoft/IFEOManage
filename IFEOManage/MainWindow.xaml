@@ -5,20 +5,36 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:IFEOManage"
         mc:Ignorable="d"
-        Title="MainWindow" Width="934">
-    <Viewbox>
+        Title="{DynamicResource MainWindowTitle}" Width="934">
 
-        <Grid>
-            <Grid HorizontalAlignment="Left" Margin="-100,20,20,20" VerticalAlignment="Top">
-                <ListView x:Name="listView" HorizontalAlignment="Left" Height="245" VerticalAlignment="Top" Width="350" Grid.ColumnSpan="2" Grid.RowSpan="2" >
-                    <ListView.View>
-                        <GridView>
-                            <GridViewColumn/>
-                        </GridView>
-                    </ListView.View>
-                </ListView>
-            </Grid>
+    <Grid Grid.Row="1" Grid.Column="2" Margin="20">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="200*"/>
+            <ColumnDefinition Width="50*"/>
+        </Grid.ColumnDefinitions>
+        <ListView x:Name="listView"></ListView>
+        <GridSplitter Width="5"></GridSplitter>
+      
+            <Grid Grid.Row="4" Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition></RowDefinition>
+                <RowDefinition></RowDefinition>
+                <RowDefinition></RowDefinition>
+                <RowDefinition></RowDefinition>
+            </Grid.RowDefinitions>
+            <Viewbox Grid.Row="0" >
+                <Button x:Name="btnRefresh" Content="{DynamicResource btnRefresh}" />
+            </Viewbox>
+            <Viewbox Grid.Row="1">
+                <Button x:Name="btnAdd" Content="{DynamicResource btnAdd}" />
+            </Viewbox>
+            <Viewbox Grid.Row="2">
+                <Button x:Name="btnModify" Content="{DynamicResource btnModify}" />
+            </Viewbox>
+            <Viewbox Grid.Row="3" >
+                <Button x:Name="btnDelete" Content="{DynamicResource btnDelete}" />
+            </Viewbox>
         </Grid>
-    </Viewbox>
+    </Grid>
 
 </Window>
