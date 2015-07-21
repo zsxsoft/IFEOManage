@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Microsoft.Win32;
+using System.ComponentModel;
 
 namespace IFEOManage
 {
@@ -74,23 +75,57 @@ namespace IFEOManage
         }
     }
 
-    public class IFEO
+    public class IFEOInstance : INotifyPropertyChanged
     {
+        private static IFEOInstance instance = new IFEOInstance();
+        private IFEOInstance() {
+            Console.WriteLine("fuck");
+        }
+        public static IFEOInstance Instance
+        {
+            get
+            {
+                return instance;
+            }
+        }
+        public event PropertyChangedEventHandler PropertyChanged;
+        private void OnPropertyChanged(PropertyChangedEventArgs e)
+        {
+            PropertyChangedEventHandler h = PropertyChanged;
+            if (h != null)
+                h(this, e);
+        }
+    
         public static string IFEORunPath = System.AppDomain.CurrentDomain.SetupInformation.ApplicationBase;
-        public static string IFEOExecution = IFEORunPath + "\\IEFOExecution.exe";
+        public string IFEOExecution = IFEORunPath + "\\IEFOExecution.exe";
         private const string IFEORegPath = @"SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\";
+
+        private List<IFEOItem> _Items = new List<IFEOItem>();
+
         /// <summary>
         /// The items
         /// </summary>
-        public static List<IFEOItem> Items = new List<IFEOItem>();
+        public List<IFEOItem> Items
+        {
+            get
+            {
+                return _Items;
+            }
+            set
+            {
+                if (_Items == value) return;
+                _Items = value;
+                OnPropertyChanged(new PropertyChangedEventArgs("Items"));
+            }
+        }
 
-        private static string GetValue(RegistryKey RegKey, string Key)
+        private string GetValue(RegistryKey RegKey, string Key)
         {
             object Value = RegKey.GetValue(Key);
             return Value == null ? "" : Value.ToString();
         } 
 
-        private static void _FormatDebuggerString(IFEOItem Debugger)
+        private void _FormatDebuggerString(IFEOItem Debugger)
         {
             string OriginalDebugger = Debugger.Debugger;
             Debugger.Debugger = Debugger.Debugger.Replace(Debugger.IFEOPath, "{%Path%}");
@@ -100,19 +135,22 @@ namespace IFEOManage
             }
         }
 
+        private RegistryKey IFEOKey = null;
+             
         /// <summary>
         /// Loads IFEO items
         /// </summary>
         /// <returns>The state of load</returns>
-        public static bool Load()
+        public bool Load()
         {
-            RegistryKey IFEOKey = Registry.LocalMachine.OpenSubKey(IFEORegPath, false);
+            IFEOKey = Registry.LocalMachine.OpenSubKey(IFEORegPath, true);
             IFEOItem TempIFEO;
             if (IFEOKey != null) 
             {
+                Items.Clear();
                 foreach (string keyName in IFEOKey.GetSubKeyNames())
                 {
-                    RegistryKey SubKey = IFEOKey.OpenSubKey(keyName, false);
+                    RegistryKey SubKey = IFEOKey.OpenSubKey(keyName, true);
                     if (SubKey != null)
                     {
                         if (SubKey.GetValueNames().ToList().IndexOf("debugger") > -1)
@@ -142,9 +180,16 @@ namespace IFEOManage
         /// </summary>
         /// <param name="DeleteList">The deletion list.</param>
         /// <returns>The state of deletion</returns>
-        public static bool Delete(List<IFEOItem> DeleteList)
+        public bool Delete(List<IFEOItem> DeleteList)
         {
-
+            if (IFEOKey != null)
+            {
+                DeleteList.ForEach(delegate (IFEOItem Item)
+                {
+                    IFEOKey.DeleteSubKeyTree(Item.PEName);
+                });
+            }
+            Load();
             return true;
 
         }
@@ -153,9 +198,16 @@ namespace IFEOManage
         /// </summary>
         /// <param name="DeleteIDList">The deletion identifier list.</param>
         /// <returns>The state of deletion</returns>
-        public static bool Delete(List<int> DeleteIDList)
+        public bool Delete(List<int> DeleteIDList)
         {
-
+            if (IFEOKey != null)
+            {
+                DeleteIDList.ForEach(delegate (int Item)
+                {
+                    IFEOKey.DeleteSubKeyTree(Items[Item].PEName);
+                });
+            }
+            Load();
             return true;
         }
     }

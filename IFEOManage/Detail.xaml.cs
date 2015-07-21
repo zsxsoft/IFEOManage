@@ -39,6 +39,7 @@ namespace IFEOManage
 
     public class DetailData : INotifyPropertyChanged
     {
+        private IFEOInstance IFEO = IFEOInstance.Instance;
         private int _id;
         /// <summary>
         /// Gets or sets the identifier of the IFEO.List in this window.
@@ -147,6 +148,7 @@ namespace IFEOManage
     /// </summary>
     public partial class Detail : Window
     {
+        private IFEOInstance IFEO = IFEOInstance.Instance;
         public DetailData Data;
         /// <summary>
         /// Initializes the data.

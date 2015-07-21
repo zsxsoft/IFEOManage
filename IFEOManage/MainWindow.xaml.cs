@@ -20,6 +20,7 @@ namespace IFEOManage
     /// </summary>
     public partial class MainWindow : Window
     {
+        private IFEOInstance IFEO = IFEOInstance.Instance;
         public MainWindow()
         {
             InitializeComponent();
