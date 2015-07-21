@@ -15,6 +15,7 @@ using System.Windows.Shapes;
 
 namespace IFEOManage
 {
+    
     /// <summary>
     /// MainWindow.xaml 的交互逻辑
     /// </summary>
@@ -41,9 +42,13 @@ namespace IFEOManage
 
         private void mnuModify_Click(object sender, RoutedEventArgs e)
         {
-            Detail WindowDetail = new Detail();
-            WindowDetail.Data.ID = listView.SelectedIndex;
-            WindowDetail.Show();
+            List<IFEOItem> Items = listView.SelectedItems.Cast<IFEOItem>().ToList();
+            Items.ForEach(delegate(IFEOItem Item)
+            {
+                Detail WindowDetail = new Detail();
+                WindowDetail.Data.ID = IFEO.Items.IndexOf(Item);
+                WindowDetail.Show();
+            });
         }
 
         private void mnuDelete_Click(object sender, RoutedEventArgs e)
@@ -52,12 +57,17 @@ namespace IFEOManage
             List<IFEOItem> Items = listView.SelectedItems.Cast<IFEOItem>().ToList();
 
             MessageBoxResult Result = MessageBox.Show((string)FindResource("msgConfirm"), this.Title, MessageBoxButton.YesNo, MessageBoxImage.Question, MessageBoxResult.No);
-            
+
             if (Result == MessageBoxResult.Yes)
             {
                 IFEO.Delete(Items);
             }
-            
+
+        }
+
+        private void Window_Closed(object sender, EventArgs e)
+        {
+            System.Environment.Exit(0);
         }
     }
 }

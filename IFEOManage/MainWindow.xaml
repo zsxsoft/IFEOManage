@@ -5,8 +5,10 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:IFEOManage"
         mc:Ignorable="d"
-        Title="{DynamicResource MainWindowTitle}" Width="800" Height="400">
-
+        Title="{DynamicResource MainWindowTitle}" Width="800" Height="400" Closed="Window_Closed">
+    <Window.Resources>
+        <local:IndexToBooleanConverter x:Key="IndexToBooleanConverter" />
+    </Window.Resources>
     <Grid Grid.Row="1" Grid.Column="1" Margin="20">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
@@ -18,8 +20,18 @@
                 <ContextMenu>
                     <MenuItem Header="{DynamicResource mnuRefresh}" Click="mnuRefresh_Click"/>
                     <MenuItem Header="{DynamicResource mnuAdd}" Click="mnuAdd_Click"/>
-                    <MenuItem Header="{DynamicResource mnuModify}" Click="mnuModify_Click"/>
-                    <MenuItem Header="{DynamicResource mnuDelete}" Click="mnuDelete_Click"/>
+                    <MenuItem Header="{DynamicResource mnuModify}" Click="mnuModify_Click">
+                        <MenuItem.Style>
+                            <Style TargetType="{x:Type MenuItem}">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding Path=SelectedItems.Count, ElementName=listView, Converter={StaticResource IndexToBooleanConverter}}" >
+                                        <Setter Property="IsEnabled" Value="False" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </MenuItem.Style>
+                    </MenuItem>
+                    <MenuItem Header="{DynamicResource mnuDelete}" Click="mnuDelete_Click" IsEnabled="{Binding Path=SelectedItems.Count, ElementName=listView}"/>
                 </ContextMenu>
             </ListView.ContextMenu>
             <ListView.View>
