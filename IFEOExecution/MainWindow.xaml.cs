@@ -32,7 +32,7 @@ namespace IFEOExecution
         {
             InitializeComponent();
             // Check is administrator
-            if (Run.IsAdministrator())
+            if (IFEOGlobal.Function.IsAdministrator())
             {
                 this.Title += "(" + (string)FindResource("Administrator") + ")";
             }
@@ -56,7 +56,7 @@ namespace IFEOExecution
         {
             string ProcessName = App.Arguments[0];
             string ProcessArgument = string.Join(" ", App.Arguments.Skip(1));
-            Run.CreateProcess(ProcessName, ProcessArgument);
+            IFEOGlobal.Launcher.CreateProcess(ProcessName, ProcessArgument);
             Environment.Exit(0);
         }
 

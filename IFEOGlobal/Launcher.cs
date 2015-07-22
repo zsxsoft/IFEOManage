@@ -1,56 +1,54 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Runtime.InteropServices;
-using System.Security.Principal;
 using System.Diagnostics;
-using System.Windows;
+using System.Linq;
+using System.Runtime.InteropServices;
+using System.Text;
 
-namespace IFEOExecution
+namespace IFEOGlobal
 {
-    [System.Runtime.InteropServices.StructLayout(LayoutKind.Sequential)]
-    public class SECURITY_ATTRIBUTES
+    public class Launcher
     {
-        public int nLength;
-        public string lpSecurityDescriptor;
-        public bool bInheritHandle;
-    }
+        [System.Runtime.InteropServices.StructLayout(LayoutKind.Sequential)]
+        public class SECURITY_ATTRIBUTES
+        {
+            public int nLength;
+            public string lpSecurityDescriptor;
+            public bool bInheritHandle;
+        }
 
-    [StructLayout(LayoutKind.Sequential)]
-    public struct STARTUPINFO
-    {
-        public int cb;
-        public string lpReserved;
-        public string lpDesktop;
-        public int lpTitle;
-        public int dwX;
-        public int dwY;
-        public int dwXSize;
-        public int dwYSize;
-        public int dwXCountChars;
-        public int dwYCountChars;
-        public int dwFillAttribute;
-        public int dwFlags;
-        public int wShowWindow;
-        public int cbReserved2;
-        public byte lpReserved2;
-        public IntPtr hStdInput;
-        public IntPtr hStdOutput;
-        public IntPtr hStdError;
-    }
+        [StructLayout(LayoutKind.Sequential)]
+        public struct STARTUPINFO
+        {
+            public int cb;
+            public string lpReserved;
+            public string lpDesktop;
+            public int lpTitle;
+            public int dwX;
+            public int dwY;
+            public int dwXSize;
+            public int dwYSize;
+            public int dwXCountChars;
+            public int dwYCountChars;
+            public int dwFillAttribute;
+            public int dwFlags;
+            public int wShowWindow;
+            public int cbReserved2;
+            public byte lpReserved2;
+            public IntPtr hStdInput;
+            public IntPtr hStdOutput;
+            public IntPtr hStdError;
+        }
 
-    [StructLayout(LayoutKind.Sequential)]
-    public struct PROCESS_INFORMATION
-    {
-        public IntPtr hProcess;
-        public IntPtr hThread;
-        public int dwProcessId;
-        public int dwThreadId;
-    }
+        [StructLayout(LayoutKind.Sequential)]
+        public struct PROCESS_INFORMATION
+        {
+            public IntPtr hProcess;
+            public IntPtr hThread;
+            public int dwProcessId;
+            public int dwThreadId;
+        }
 
-    class Run
-    {
         [DllImport("Kernel32.dll", CharSet = CharSet.Ansi)]
         public static extern bool CreateProcess(
             StringBuilder lpApplicationName, StringBuilder lpCommandLine,
@@ -87,12 +85,12 @@ namespace IFEOExecution
             if (!CreateProcess(null, new StringBuilder(ProcessName).Append(" ").Append(CommandLine), null, null, false, 0x1 | 0x2, null, null, ref SInfo, ref PInfo))
             {
                 // May be must be run under Administrator.
-                
-                if (IsAdministrator())
+
+                if (IFEOGlobal.Function.IsAdministrator())
                 {
                     throw new Exception("Failure");
                 }
-                else 
+                else
                 {
                     // Try run as administrator.
                     ProcessStartInfo startInfo = new ProcessStartInfo();
@@ -109,13 +107,8 @@ namespace IFEOExecution
             CloseHandle(PInfo.hThread);
         }
 
-        public static bool IsAdministrator()
-        {
-            WindowsIdentity Identity = WindowsIdentity.GetCurrent();
-            WindowsPrincipal Principal = new WindowsPrincipal(Identity);
-            return Principal.IsInRole(WindowsBuiltInRole.Administrator);
-        }
+
+
+
     }
-
-
 }

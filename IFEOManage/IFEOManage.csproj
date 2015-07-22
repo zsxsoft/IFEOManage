@@ -125,6 +125,12 @@
   <ItemGroup>
     <Resource Include="Icon.ico" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\IFEOGlobal\IFEOGlobal.csproj">
+      <Project>{2562a59d-6404-4513-ac74-4903e1fe8ce1}</Project>
+      <Name>IFEOGlobal</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

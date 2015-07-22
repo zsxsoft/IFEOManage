@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IFEOManage", "IFEOManage\IF
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IFEOExecution", "IFEOExecution\IFEOExecution.csproj", "{3889B757-3541-4F24-AA2D-CEE82D07E4B4}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IFEOGlobal", "IFEOGlobal\IFEOGlobal.csproj", "{2562A59D-6404-4513-AC74-4903E1FE8CE1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{3889B757-3541-4F24-AA2D-CEE82D07E4B4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3889B757-3541-4F24-AA2D-CEE82D07E4B4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3889B757-3541-4F24-AA2D-CEE82D07E4B4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2562A59D-6404-4513-AC74-4903E1FE8CE1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2562A59D-6404-4513-AC74-4903E1FE8CE1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2562A59D-6404-4513-AC74-4903E1FE8CE1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2562A59D-6404-4513-AC74-4903E1FE8CE1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

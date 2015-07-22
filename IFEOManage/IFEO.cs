@@ -4,13 +4,11 @@ using System.Linq;
 using Microsoft.Win32;
 using System.Collections.ObjectModel;
 using System.Windows;
+using IFEOGlobal;
 
 namespace IFEOManage
 {
-    public enum RunMethod {
-        Close = 0,
-        Popup = 1
-    }
+
     /// <summary>
     /// IFEOItem
     /// </summary>
