@@ -1,0 +1,56 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:local="clr-namespace:IFEOGlobal"
+                    xmlns:s="clr-namespace:System;assembly=mscorlib">
+
+    <!-- Author -->
+    <s:String x:Key="Language">中文(简体)</s:String>
+
+    <s:String x:Key="IFEOAuthor">zsx</s:String>
+    <s:String x:Key="IFEOAuthorUri">http://www.zsxsoft.com/</s:String>
+    <s:String x:Key="TranslationAuthor">zsx</s:String>
+    <s:String x:Key="TranslationAuthorUri">http://www.zsxsoft.com/</s:String>
+
+    <!-- Global Lang -->
+
+    <s:String x:Key="mnuRefresh">刷新(_R)</s:String>
+    <s:String x:Key="mnuAdd">新建(_N)</s:String>
+    <s:String x:Key="mnuModify">修改(_M)</s:String>
+    <s:String x:Key="mnuDelete">删除(_D)</s:String>
+    <s:String x:Key="Administrator">管理员</s:String>
+    
+
+    <s:String x:Key="lstPEName">可执行文件名</s:String>
+    <s:String x:Key="lstDebugger">指向文件</s:String>
+    <s:String x:Key="lstRemark">备注</s:String>
+
+    <s:String x:Key="btnBrowse">浏览(_B)</s:String>
+    <s:String x:Key="btnBrowse2">浏览(_W)</s:String>
+    <s:String x:Key="btnSave">保存(_S)</s:String>
+    <s:String x:Key="btnOpen">打开(_O)</s:String>
+    <s:String x:Key="btnClose">关闭(_C)</s:String>
+
+    <s:String x:Key="cfmManagedByThis">由IFEOManage管理</s:String>
+
+    <s:String x:Key="cfmPopup">弹出提示</s:String>
+    <s:String x:Key="cfmExitDirectly">直接退出</s:String>
+
+    <!-- Main Window Start  -->
+    <s:String x:Key="MainWindowTitle">IFEOManage</s:String>
+    <s:String x:Key="cfmNotFound">可执行文件不存在</s:String>
+    <s:String x:Key="msgConfirm">确定要删除吗？</s:String>
+
+    <!-- Detail Start -->
+    <s:String x:Key="DetailTitle">映像劫持信息调整</s:String>
+    <s:String x:Key="chkManage">将其交由_IFEOManage进行管理</s:String>
+    <s:String x:Key="optStartAction">程序启动操作</s:String>
+    <s:String x:Key="WindowTitle">打开文件提示</s:String>
+
+    
+    <!-- Execution Start -->
+    <s:String x:Key="WarningLine1">您正尝试打开以下文件：</s:String>
+    <s:String x:Key="txtClosingTime">退出程序剩余时间（秒）：</s:String>
+    
+    
+    
+</ResourceDictionary>
