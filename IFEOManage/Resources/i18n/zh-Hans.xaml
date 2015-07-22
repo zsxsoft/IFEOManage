@@ -3,6 +3,14 @@
                     xmlns:local="clr-namespace:IFEOManage"
                     xmlns:s="clr-namespace:System;assembly=mscorlib">
 
+    <!-- Author -->
+    <s:String x:Key="Language">中文(简体)</s:String>
+    
+    <s:String x:Key="IFEOAuthor">zsx</s:String>
+    <s:String x:Key="IFEOAuthorUri">http://www.zsxsoft.com/</s:String>
+    <s:String x:Key="TranslationAuthor">zsx</s:String>
+    <s:String x:Key="TranslationAuthorUri">http://www.zsxsoft.com/</s:String>
+    
     <!-- Global Lang -->
 
     <s:String x:Key="mnuRefresh">刷新</s:String>

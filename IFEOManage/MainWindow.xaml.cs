@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -27,6 +28,10 @@ namespace IFEOManage
             InitializeComponent();
             IFEO.Load();
             listView.ItemsSource = IFEO.Items;  
+
+
+            Version ThisVersion = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
+            VersionBlock.Text = string.Format("{0}.{1}.{2}.{3}", ThisVersion.Major, ThisVersion.Minor, ThisVersion.Build, ThisVersion.Revision);
         }
 
         private void mnuAdd_Click(object sender, RoutedEventArgs e)
@@ -68,6 +73,21 @@ namespace IFEOManage
         private void Window_Closed(object sender, EventArgs e)
         {
             System.Environment.Exit(0);
+        }
+
+        private void AuthorHyperLink_RequestNavigate(object sender, RequestNavigateEventArgs e)
+        {
+            Process.Start((string)FindResource("IFEOAuthorUri"));
+        }
+
+        private void GitHubHyperLink_RequestNavigate(object sender, RequestNavigateEventArgs e)
+        {
+            Process.Start(e.Uri.ToString());
+        }
+
+        private void TranslationHyperLink_RequestNavigate(object sender, RequestNavigateEventArgs e)
+        {
+            Process.Start((string)FindResource("TranslationAuthorUri"));
         }
     }
 }

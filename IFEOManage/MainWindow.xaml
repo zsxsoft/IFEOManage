@@ -8,14 +8,17 @@
         Title="{DynamicResource MainWindowTitle}" Width="800" Height="400" Closed="Window_Closed">
     <Window.Resources>
         <local:IndexToBooleanConverter x:Key="IndexToBooleanConverter" />
+        <local:StringToUriConverter x:Key="StringToUriConverter" />
     </Window.Resources>
-    <Grid Grid.Row="1" Grid.Column="1" Margin="20">
+    <Grid Margin="20">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
-        <GridSplitter Width="30" Background="{x:Null}" Grid.Column="1">
-        </GridSplitter>
-        <ListView x:Name="listView">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="40"/>
+        </Grid.RowDefinitions>
+        <ListView x:Name="listView" Grid.Row="0">
             <ListView.ContextMenu>
                 <ContextMenu>
                     <MenuItem Header="{DynamicResource mnuRefresh}" Click="mnuRefresh_Click"/>
@@ -44,6 +47,15 @@
                 </GridView>
             </ListView.View>
         </ListView>
+        <Grid Margin="0, 20, 0, 0" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center">
+            <TextBlock>
+                IFEOManage v<TextBlock x:Name="VersionBlock"></TextBlock>; 
+                Powered by <Hyperlink x:Name="AuthorHyperLink" NavigateUri="http://www.zsxsoft.com/" RequestNavigate="AuthorHyperLink_RequestNavigate"><TextBlock Text="{DynamicResource IFEOAuthor}"></TextBlock></Hyperlink>; 
+                <Hyperlink x:Name="GitHubHyperLink" NavigateUri="https://github.com/zsxsoft/IFEOManage/" RequestNavigate="GitHubHyperLink_RequestNavigate">GitHub</Hyperlink>; 
+                Language: <TextBlock Text="{DynamicResource Language}"/>;
+                Translation by <Hyperlink x:Name="TranslationHyperLink" NavigateUri="http://www.zsxsoft.com/" RequestNavigate="TranslationHyperLink_RequestNavigate"><TextBlock Text="{DynamicResource TranslationAuthor}"></TextBlock></Hyperlink>
+                </TextBlock>
+        </Grid>
         <!--
         <Grid Grid.Row="4" Grid.Column="2">
             <Grid.RowDefinitions>

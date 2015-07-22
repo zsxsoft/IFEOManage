@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Windows.Data;
@@ -13,8 +14,7 @@ namespace IFEOManage
     [ValueConversion(typeof(bool), typeof(bool))]
     public class InverseBooleanConverter : IValueConverter
     {
-        public object Convert(object value, Type targetType, object parameter,
-            System.Globalization.CultureInfo culture)
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             if (targetType != typeof(bool))
                 throw new InvalidOperationException("The target must be a boolean");
@@ -22,8 +22,7 @@ namespace IFEOManage
             return !(bool)value;
         }
 
-        public object ConvertBack(object value, Type targetType, object parameter,
-            System.Globalization.CultureInfo culture)
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
             throw new NotSupportedException();
         }
@@ -35,8 +34,7 @@ namespace IFEOManage
     [ValueConversion(typeof(int), typeof(bool))]
     public class IndexToBooleanConverter : IValueConverter
     {
-        public object Convert(object value, Type targetType, object parameter,
-            System.Globalization.CultureInfo culture)
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             if (targetType != typeof(int))
                 throw new InvalidOperationException("The target must be a number");
@@ -45,10 +43,24 @@ namespace IFEOManage
             return ((int)value == 0 ? false : true);
         }
 
-        public object ConvertBack(object value, Type targetType, object parameter,
-            System.Globalization.CultureInfo culture)
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
             throw new NotSupportedException();
+        }
+    }
+
+    [ValueConversion(typeof(string), typeof(Uri))]
+    public class StringToUriConverter : IValueConverter
+    {
+        public object Convert(object values, Type targetType, object parameter, CultureInfo culture)
+        {
+            string uriString = String.Join(string.Empty, values);
+            return new Uri(uriString);
+        }
+
+        public object ConvertBack(object value, Type targetTypes, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
         }
     }
 }
