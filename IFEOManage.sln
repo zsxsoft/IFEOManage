@@ -5,7 +5,7 @@ VisualStudioVersion = 14.0.23107.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IFEOManage", "IFEOManage\IFEOManage.csproj", "{46F9DDC5-7D7A-43AD-9DB0-4A0A6D102354}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IFEOExecution", "IEFOExecution\IFEOExecution.csproj", "{3889B757-3541-4F24-AA2D-CEE82D07E4B4}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IFEOExecution", "IFEOExecution\IFEOExecution.csproj", "{3889B757-3541-4F24-AA2D-CEE82D07E4B4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
