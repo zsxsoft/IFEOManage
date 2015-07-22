@@ -13,7 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace IEFOExecution
+namespace IFEOExecution
 {
     /// <summary>
     /// MainWindow.xaml 的交互逻辑
@@ -23,6 +23,16 @@ namespace IEFOExecution
         public MainWindow()
         {
             InitializeComponent();
+        }
+
+        private void btnOpen_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void btnExit_Click(object sender, RoutedEventArgs e)
+        {
+            Environment.Exit(0);
         }
     }
 }

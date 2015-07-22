@@ -1,12 +1,29 @@
-﻿<Window x:Class="IEFOExecution.MainWindow"
+﻿<Window x:Class="IFEOExecution.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:IEFOExecution"
+        xmlns:local="clr-namespace:IFEOExecution"
         mc:Ignorable="d"
-        Title="MainWindow" Height="350" Width="525">
+        Title="{DynamicResource WindowTitle}" Height="217" Width="434" WindowStartupLocation="CenterScreen">
     <Grid>
-        
+        <Grid.RowDefinitions>
+            <RowDefinition></RowDefinition>
+            <RowDefinition></RowDefinition>
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="0">
+            <TextBlock HorizontalAlignment="Left" Margin="30,25,0,0" TextWrapping="Wrap" Text="{DynamicResource WarningLine1}" VerticalAlignment="Top"/>
+            <TextBlock HorizontalAlignment="Left" Margin="30,45,0,0" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Top"/>
+
+        </Grid>
+        <Grid Grid.Row="1" VerticalAlignment="Bottom">
+            <Button x:Name="btnOpen" Content="{DynamicResource btnOpen}" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,100,5" Width="75" Height="36" Click="btnOpen_Click"/>
+            <Button x:Name="btnExit" Content="{DynamicResource btnClose}" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,10,5" Width="75" Height="36" Click="btnExit_Click"/>
+
+            <Grid Margin="25,0,0,15">
+                <TextBlock Grid.Column="0" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Timer" VerticalAlignment="Bottom"/>
+            </Grid>
+
+        </Grid>
     </Grid>
 </Window>

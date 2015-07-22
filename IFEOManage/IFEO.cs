@@ -186,12 +186,18 @@ namespace IFEOManage
             return Value == null ? "" : Value.ToString();
         }
 
-        private void _FormatDebuggerString(IFEOItem Debugger)
+        private void _FormatDebuggerStringAndUpdate(IFEOItem Debugger)
         {
             if (Debugger.ManageByThis)
             {
+                // Auto Update
+                if (Debugger.Debugger != IFEOExecution)
+                {
+                    Debugger.RegKey.SetValue("Debugger", IFEOExecution);
+                }
                 Debugger.ManageByThis = true;
                 Debugger.Debugger = (string)Application.Current.FindResource("cfmManagedByThis");
+
             }
         }
 
@@ -220,7 +226,7 @@ namespace IFEOManage
                             TempIFEO.RegKey = SubKey;
                             TempIFEO.IFEOPath = (string)GetValue(SubKey, "IFEOManage_Path");
                             TempIFEO.PEName = SubKey.Name.Split('\\').Last();
-                            TempIFEO.Debugger = SubKey.GetValue("debugger").ToString();
+                            TempIFEO.Debugger = SubKey.GetValue("Debugger").ToString();
                             TempIFEO.Remark = (string)GetValue(SubKey, "IFEOManage_Remark");
 
                             string RunMethodString = (string)GetValue(SubKey, "IFEOManage_RunMethod");
@@ -229,7 +235,7 @@ namespace IFEOManage
                                 TempIFEO.RunMethod = (RunMethod)Enum.Parse(TempIFEO.RunMethod.GetType(), RunMethodString);
                             }
 
-                            _FormatDebuggerString(TempIFEO);
+                            _FormatDebuggerStringAndUpdate(TempIFEO);
                             Items.Add(TempIFEO);
                         }
 
@@ -290,11 +296,11 @@ namespace IFEOManage
             Item.RegKey = IFEOKey.CreateSubKey(Item.PEName);
             if (Item.Debugger == "")
             {
-                Item.RegKey.DeleteValue("debugger");
+                Item.RegKey.DeleteValue("Debugger");
             }
             else
             {
-                Item.RegKey.SetValue("debugger", Item.Debugger);
+                Item.RegKey.SetValue("Debugger", Item.Debugger);
             }
             Item.RegKey.SetValue("IFEOManage_Path", IFEORunPath);
             Item.RegKey.SetValue("IFEOManage_Remark", Item.Remark);

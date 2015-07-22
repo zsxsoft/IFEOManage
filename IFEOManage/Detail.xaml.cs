@@ -243,7 +243,7 @@ namespace IFEOManage
             Item.ManageByThis = Data.ManageByThis;
             if (Data.ManageByThis)
             {
-                Item.Debugger = IFEO.IFEOExecution;
+                Item.Debugger = "\"" + IFEO.IFEOExecution + "\"";
             } else
             {
                 Item.Debugger = Data.DebuggerPath;
