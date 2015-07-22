@@ -34,7 +34,7 @@ namespace IFEOExecution
             Uri BaseUri = new Uri(System.IO.Directory.GetCurrentDirectory());
             Uri ProgramName = new Uri(BaseUri, Arguments[0]);
             Log.WriteLine("Get absolute path: " + ProgramName.AbsolutePath) ;
-            if (!File.Exists(ProgramName.AbsolutePath))
+            if (!File.Exists(Uri.UnescapeDataString(ProgramName.AbsolutePath)))
             {
                 Log.WriteLine("Path not found.");
                 MessageBox.Show((string)FindResource("cfmNotFound"), "IFEOExecution", MessageBoxButton.OK, MessageBoxImage.Error);
