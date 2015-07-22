@@ -184,5 +184,19 @@ namespace IFEOManage
                 Data.DebuggerPath = IFEO.IFEOExecution;
             }
         }
+
+        private void btnSave_Click(object sender, RoutedEventArgs e)
+        {
+            Data.PEPath = Data.PEPath.Trim();
+            if (Data.PEPath == "") return;
+            IFEOItem Item = new IFEOItem();
+            Item.Debugger = Data.DebuggerPath;
+            Item.ManageByThis = Data.ManageByThis;
+            Item.PEName = Data.PEPath;
+
+
+            IFEO.Save(Item);
+            Data = new DetailData(); // Refresh it
+        }
     }
 }

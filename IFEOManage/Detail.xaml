@@ -46,7 +46,7 @@
             </CheckBox>
         </Grid>
         <Grid Grid.Row="3">
-            <Button x:Name="btnSave" HorizontalAlignment="Left" Margin="263,17,0,0" VerticalAlignment="Top" Width="75">
+            <Button x:Name="btnSave" HorizontalAlignment="Center" VerticalAlignment="Center" Click="btnSave_Click" Width="122" Height="30" >
                 <AccessText Text="{DynamicResource btnSave}"></AccessText>
             </Button>
         </Grid>

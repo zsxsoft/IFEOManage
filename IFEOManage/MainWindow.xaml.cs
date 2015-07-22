@@ -26,7 +26,7 @@ namespace IFEOManage
         {
             InitializeComponent();
             IFEO.Load();
-            this.listView.ItemsSource = IFEO.Items;//为ListView绑定数据源  
+            listView.ItemsSource = IFEO.Items;  
         }
 
         private void mnuAdd_Click(object sender, RoutedEventArgs e)

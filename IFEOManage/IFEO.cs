@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using Microsoft.Win32;
 using System.ComponentModel;
+using System.Collections.ObjectModel;
 
 namespace IFEOManage
 {
@@ -16,7 +17,7 @@ namespace IFEOManage
         /// <value>
         /// The PE file's name.
         /// </value>
-        public string PEName { get; set; }
+        public string PEName { get; set; } = "";
 
         /// <summary>
         /// Gets or sets the remark.
@@ -24,15 +25,15 @@ namespace IFEOManage
         /// <value>
         /// The remark.
         /// </value>
-        public string Remark { get; set; }
-        
+        public string Remark { get; set; } = "";
+
         /// <summary>
         /// Gets or sets the debugger.
         /// </summary>
         /// <value>
         /// The debugger.
         /// </value>
-        public string Debugger { get; set; }
+        public string Debugger { get; set; } = "";
         /// <summary>
         /// Gets or sets the RegKey.
         /// </summary>
@@ -47,7 +48,7 @@ namespace IFEOManage
         /// <value>
         ///   <c>true</c> if [manage by this]; otherwise, <c>false</c>.
         /// </value>
-        public bool ManageByThis { get; set; }
+        public bool ManageByThis { get; set; } = true;
 
         private string _IFEOPath;
         /// <summary>
@@ -75,10 +76,14 @@ namespace IFEOManage
         }
     }
 
+    /// <summary>
+    /// IFEOInstance
+    /// </summary>
     public class IFEOInstance : INotifyPropertyChanged
     {
         private static IFEOInstance instance = new IFEOInstance();
-        private IFEOInstance() {
+        private IFEOInstance()
+        {
             Console.WriteLine("fuck");
         }
         public static IFEOInstance Instance
@@ -95,35 +100,22 @@ namespace IFEOManage
             if (h != null)
                 h(this, e);
         }
-    
-        public static string IFEORunPath = System.AppDomain.CurrentDomain.SetupInformation.ApplicationBase;
-        public string IFEOExecution = IFEORunPath + "\\IEFOExecution.exe";
-        private const string IFEORegPath = @"SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\";
 
-        private List<IFEOItem> _Items = new List<IFEOItem>();
+        public static string IFEORunPath = System.Environment.CurrentDirectory;
+        public string IFEOExecution = System.Environment.CurrentDirectory + "\\IEFOExecution.exe";
+        private const string IFEORegPath = @"SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\";
 
         /// <summary>
         /// The items
         /// </summary>
-        public List<IFEOItem> Items
-        {
-            get
-            {
-                return _Items;
-            }
-            set
-            {
-                if (_Items == value) return;
-                _Items = value;
-                OnPropertyChanged(new PropertyChangedEventArgs("Items"));
-            }
-        }
+        public ObservableCollection<IFEOItem> Items = new ObservableCollection<IFEOItem>();
+
 
         private string GetValue(RegistryKey RegKey, string Key)
         {
             object Value = RegKey.GetValue(Key);
             return Value == null ? "" : Value.ToString();
-        } 
+        }
 
         private void _FormatDebuggerString(IFEOItem Debugger)
         {
@@ -136,7 +128,7 @@ namespace IFEOManage
         }
 
         private RegistryKey IFEOKey = null;
-             
+
         /// <summary>
         /// Loads IFEO items
         /// </summary>
@@ -145,7 +137,7 @@ namespace IFEOManage
         {
             IFEOKey = Registry.LocalMachine.OpenSubKey(IFEORegPath, true);
             IFEOItem TempIFEO;
-            if (IFEOKey != null) 
+            if (IFEOKey != null)
             {
                 Items.Clear();
                 foreach (string keyName in IFEOKey.GetSubKeyNames())
@@ -207,6 +199,32 @@ namespace IFEOManage
                     IFEOKey.DeleteSubKeyTree(Items[Item].PEName);
                 });
             }
+            Load();
+            return true;
+        }
+
+        /// <summary>
+        /// Save IFEO Item to Registry
+        /// </summary>
+        /// <param name="Item">The item.</param>
+        /// <returns>
+        /// true
+        /// </returns>
+        public bool Save(IFEOItem Item)
+        {
+            IFEOKey = Registry.LocalMachine.OpenSubKey(IFEORegPath, true);
+            Item.RegKey = IFEOKey.CreateSubKey(Item.PEName);
+            if (Item.Debugger == "")
+            {
+                Item.RegKey.DeleteValue("debugger");
+            }
+            else
+            {
+                Item.RegKey.SetValue("debugger", Item.Debugger);
+            }
+            Item.RegKey.SetValue("IFEOManage_Path", IFEORunPath);
+            Item.RegKey.SetValue("IFEOManage_Remark", Item.Remark);
+            Item.RegKey.Close();
             Load();
             return true;
         }
