@@ -40,7 +40,7 @@
                 <GridView>
                     <GridViewColumn Header="{DynamicResource lstPEName}" Width="200" DisplayMemberBinding="{Binding Path=PEName}"></GridViewColumn>
                     <GridViewColumn Header="{DynamicResource lstDebugger}" Width="200" DisplayMemberBinding="{Binding Path=Debugger}"></GridViewColumn>
-                    <GridViewColumn Header="{DynamicResource lstRemark}" Width="300" DisplayMemberBinding="{Binding Path=Remark}"></GridViewColumn>
+                    <GridViewColumn Header="{DynamicResource lstRemark}" Width="300" DisplayMemberBinding="{Binding Path=DisplayRemark}"></GridViewColumn>
                 </GridView>
             </ListView.View>
         </ListView>

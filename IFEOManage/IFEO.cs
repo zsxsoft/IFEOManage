@@ -9,6 +9,9 @@ using System.Windows;
 
 namespace IFEOManage
 {
+    /// <summary>
+    /// IFEOItem
+    /// </summary>
     public class IFEOItem
     {
 
@@ -27,6 +30,27 @@ namespace IFEOManage
         /// The remark.
         /// </value>
         public string Remark { get; set; } = "";
+
+
+        /// <summary>
+        /// Gets remark for display.
+        /// </summary>
+        /// <value>
+        /// The remark.
+        /// </value>
+        public string DisplayRemark
+        {
+            get
+            {
+                string Extra = GetExtraRemarkString();
+                if (Extra != "")
+                {
+                    Extra += "; ";
+                }
+                return Extra + Remark;
+            }
+        }
+
 
         /// <summary>
         /// Gets or sets the debugger.
@@ -58,7 +82,8 @@ namespace IFEOManage
         /// <value>
         /// The ifeo path.
         /// </value>
-        public string IFEOPath {
+        public string IFEOPath
+        {
             get
             {
                 return _IFEOPath;
@@ -69,18 +94,43 @@ namespace IFEOManage
                 if (value == "")
                 {
                     _IFEOPath = System.AppDomain.CurrentDomain.SetupInformation.ApplicationBase;
-                } else
+                }
+                else
                 {
                     _IFEOPath = value;
                 }
             }
+        }
+
+        private string GetExtraRemarkString()
+        {
+            List<string> Ret = new List<string>();
+            if (!ManageByThis)
+            {
+                string DebuggerFile = "";
+                if (Debugger.Contains("\""))
+                {
+                    DebuggerFile = DebuggerFile.Split('"')[1];
+                } else if (Debugger.Contains(" "))
+                {
+                    DebuggerFile = Debugger.Split(' ')[0];
+                } else
+                {
+                    DebuggerFile = Debugger;
+                }
+                if (!System.IO.File.Exists(DebuggerFile))
+                {
+                    Ret.Add((string)Application.Current.FindResource("cfmNotFound"));
+                }
+            }
+            return String.Join("; ", Ret);
         }
     }
 
     /// <summary>
     /// IFEOInstance
     /// </summary>
-    public class IFEOInstance : INotifyPropertyChanged
+    public class IFEOInstance
     {
         private static IFEOInstance instance = new IFEOInstance();
         private IFEOInstance()
@@ -93,13 +143,6 @@ namespace IFEOManage
             {
                 return instance;
             }
-        }
-        public event PropertyChangedEventHandler PropertyChanged;
-        private void OnPropertyChanged(PropertyChangedEventArgs e)
-        {
-            PropertyChangedEventHandler h = PropertyChanged;
-            if (h != null)
-                h(this, e);
         }
 
         public static string IFEORunPath = System.Environment.CurrentDirectory;
