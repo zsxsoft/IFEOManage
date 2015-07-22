@@ -16,4 +16,6 @@
     <s:String x:Key="txtClosingTime">退出程序剩余时间（秒）：</s:String>
 
     <s:String x:Key="cfmNotFound">文件不存在</s:String>
+
+    <s:String x:Key="Administrator">管理员</s:String>
 </ResourceDictionary>

@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Runtime.InteropServices;
+using System.Security.Principal;
+using System.Diagnostics;
+using System.Windows;
 
 namespace IFEOExecution
 {
@@ -70,17 +73,49 @@ namespace IFEOExecution
         [DllImport("Kernel32.dll")]
         public static extern bool CloseHandle(IntPtr hObject);
 
+        /// <summary>
+        /// Creates the process.
+        /// </summary>
+        /// <param name="ProcessName">Name of the process.</param>
+        /// <param name="CommandLine">The command line.</param>
+        /// <exception cref="System.Exception">Failure</exception>
         public static void CreateProcess(string ProcessName, string CommandLine)
         {
             STARTUPINFO SInfo = new STARTUPINFO();
             PROCESS_INFORMATION PInfo = new PROCESS_INFORMATION();
+            DbgUiConnectToDbg();
             if (!CreateProcess(null, new StringBuilder(ProcessName).Append(" ").Append(CommandLine), null, null, false, 0x1 | 0x2, null, null, ref SInfo, ref PInfo))
             {
-                throw new Exception("调用失败");
+                // May be must be run under Administrator.
+                
+                if (IsAdministrator())
+                {
+                    throw new Exception("Failure");
+                }
+                else 
+                {
+                    // Try run as administrator.
+                    ProcessStartInfo startInfo = new ProcessStartInfo();
+                    startInfo.UseShellExecute = true;
+                    startInfo.WorkingDirectory = Environment.CurrentDirectory;
+                    startInfo.FileName = Process.GetCurrentProcess().MainModule.FileName;
+                    startInfo.Arguments = string.Join(" ", Environment.CommandLine.Split(' ').Skip(1));
+                    startInfo.Verb = "runas";
+                    Process.Start(startInfo);
+                }
             }
             DbgUiStopDebugging(PInfo.hProcess);
             CloseHandle(PInfo.hProcess);
             CloseHandle(PInfo.hThread);
         }
+
+        public static bool IsAdministrator()
+        {
+            WindowsIdentity Identity = WindowsIdentity.GetCurrent();
+            WindowsPrincipal Principal = new WindowsPrincipal(Identity);
+            return Principal.IsInRole(WindowsBuiltInRole.Administrator);
+        }
     }
+
+
 }

@@ -31,6 +31,11 @@ namespace IFEOExecution
         public MainWindow()
         {
             InitializeComponent();
+            // Check is administrator
+            if (Run.IsAdministrator())
+            {
+                this.Title += "(" + (string)FindResource("Administrator") + ")";
+            }
             ArgumentString = string.Join(" ", App.Arguments);
             TxtArgumentString.Text = ArgumentString; // Don't need data binging here.
             Timer = new System.Windows.Threading.DispatcherTimer();
@@ -52,6 +57,7 @@ namespace IFEOExecution
             string ProcessName = App.Arguments[0];
             string ProcessArgument = string.Join(" ", App.Arguments.Skip(1));
             Run.CreateProcess(ProcessName, ProcessArgument);
+            Environment.Exit(0);
         }
 
         private void btnExit_Click(object sender, RoutedEventArgs e)
