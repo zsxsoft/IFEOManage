@@ -79,16 +79,19 @@ namespace IFEOGlobal
         /// <exception cref="System.Exception">Failure</exception>
         public static void CreateProcess(string ProcessName, string CommandLine)
         {
+            Log.WriteLine("CreateProcess(" + ProcessName + ", " + CommandLine + ")");
             STARTUPINFO SInfo = new STARTUPINFO();
             PROCESS_INFORMATION PInfo = new PROCESS_INFORMATION();
+            Log.WriteLine("Try Connect to DBG");
             DbgUiConnectToDbg();
+            Log.WriteLine("Try CreateProcess");
             if (!CreateProcess(null, new StringBuilder(ProcessName).Append(" ").Append(CommandLine), null, null, false, 0x1 | 0x2, null, null, ref SInfo, ref PInfo))
             {
                 // May be must be run under Administrator.
 
-                if (IFEOGlobal.Function.IsAdministrator())
+                if (Global.IsAdministrator())
                 {
-                    throw new Exception("Failure");
+                    Log.WriteLine("Creating process failed.");
                 }
                 else
                 {
@@ -99,12 +102,15 @@ namespace IFEOGlobal
                     startInfo.FileName = Process.GetCurrentProcess().MainModule.FileName;
                     startInfo.Arguments = string.Join(" ", Environment.CommandLine.Split(' ').Skip(1));
                     startInfo.Verb = "runas";
+                    Log.WriteLine("Try runas administrator");
                     Process.Start(startInfo);
                 }
             }
+            Log.WriteLine("Try Stop Debugging");
             DbgUiStopDebugging(PInfo.hProcess);
             CloseHandle(PInfo.hProcess);
             CloseHandle(PInfo.hThread);
+            Log.WriteLine("Created Process.");
         }
 
 

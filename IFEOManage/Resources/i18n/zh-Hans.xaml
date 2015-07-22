@@ -33,11 +33,17 @@
     
     <!-- Main Window Start  -->
     <s:String x:Key="MainWindowTitle">IFEOManage</s:String>
-    <s:String x:Key="cfmNotFound">可执行文件不存在</s:String>
     <s:String x:Key="msgConfirm">确定要删除吗？</s:String>
     
     <!-- Detail Start -->
     <s:String x:Key="DetailTitle">映像劫持信息调整</s:String>
     <s:String x:Key="chkManage">将其交由_IFEOManage进行管理</s:String>
     <s:String x:Key="optStartAction">程序启动操作</s:String>
+    
+    <!-- Error Messages -->
+    <s:String x:Key="cfmNotFound">可执行文件不存在</s:String>
+    <s:String x:Key="cfmCannotOpenRegistry">无法打开注册表</s:String>
+    <s:String x:Key="cfmOpenSubKeyError">无法打开注册表项：</s:String>
+    <s:String x:Key="cfmCreateDebuggerError">无法写入Debugger：</s:String>
+    <s:String x:Key="cfmDeleteError">无法删除：</s:String>
 </ResourceDictionary>

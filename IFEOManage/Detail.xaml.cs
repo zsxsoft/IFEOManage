@@ -14,7 +14,8 @@ namespace IFEOManage
         /// <value>
         /// The identifier.
         /// </value>
-        public int ID {
+        public int ID
+        {
             get
             {
                 return _id;
@@ -22,10 +23,10 @@ namespace IFEOManage
             set
             {
                 if (_id == value) return;
-
-                if (IFEO.Items.Count > value)
+                _id = value;
+                if (IFEO.Items.Count > value && value != -1)
                 {
-                    _id = value;
+                    
                     IFEOItem Item = IFEO.Items[_id];
                     this.PEPath = Item.PEName;
                     this.DebuggerPath = Item.Debugger;
@@ -33,7 +34,7 @@ namespace IFEOManage
                     this.RunMethod = Item.RunMethod;
                     this.Remark = Item.Remark;
                 }
-                
+
                 OnPropertyChanged(new PropertyChangedEventArgs("ID"));
             }
         }
@@ -152,6 +153,7 @@ namespace IFEOManage
             if (h != null)
                 h(this, e);
         }
+        
     }
 
     /// <summary>
@@ -166,7 +168,7 @@ namespace IFEOManage
         /// </summary>
         public void InitializeData()
         {
-            Data.ID = 0;
+            Data.ID = -1;
             Data.PEPath = "";
             Data.DebuggerPath = "";
             Data.Remark = "";
@@ -220,7 +222,7 @@ namespace IFEOManage
         {
             if (Data.ManageByThis)
             {
-                Data.DebuggerPath = IFEO.IFEOExecution;
+                Data.DebuggerPath = Global.IFEOExecution;
             }
         }
 
@@ -233,7 +235,7 @@ namespace IFEOManage
             Item.ManageByThis = Data.ManageByThis;
             if (Data.ManageByThis)
             {
-                Item.Debugger = "\"" + IFEO.IFEOExecution + "\"";
+                Item.Debugger = "\"" + Global.IFEOExecution + "\"";
             } else
             {
                 Item.Debugger = Data.DebuggerPath;
@@ -242,7 +244,6 @@ namespace IFEOManage
             Item.PEName = Data.PEPath;
             Item.Remark = Data.Remark;
             Item.RunMethod = Data.RunMethod;
-
             IFEO.Save(Item);
             InitializeData(); // Refresh it
         }

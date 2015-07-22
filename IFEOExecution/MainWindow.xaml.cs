@@ -1,18 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
+﻿using IFEOGlobal;
+using System;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using System.Windows.Threading;
 
 namespace IFEOExecution
@@ -26,13 +15,13 @@ namespace IFEOExecution
             get; set;
         }
         private DispatcherTimer Timer = null;
-        private int RemainTime = 5;
+        private int RemainTime = Config.Data.Timeout;
 
         public MainWindow()
         {
             InitializeComponent();
             // Check is administrator
-            if (IFEOGlobal.Function.IsAdministrator())
+            if (Global.IsAdministrator())
             {
                 this.Title += "(" + (string)FindResource("Administrator") + ")";
             }

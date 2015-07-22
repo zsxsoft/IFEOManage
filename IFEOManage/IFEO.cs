@@ -5,6 +5,7 @@ using Microsoft.Win32;
 using System.Collections.ObjectModel;
 using System.Windows;
 using IFEOGlobal;
+using System.Text;
 
 namespace IFEOManage
 {
@@ -119,10 +120,12 @@ namespace IFEOManage
                 if (Debugger.Contains("\""))
                 {
                     DebuggerFile = DebuggerFile.Split('"')[1];
-                } else if (Debugger.Contains(" "))
+                }
+                else if (Debugger.Contains(" "))
                 {
                     DebuggerFile = Debugger.Split(' ')[0];
-                } else
+                }
+                else
                 {
                     DebuggerFile = Debugger;
                 }
@@ -130,7 +133,8 @@ namespace IFEOManage
                 {
                     Ret.Add((string)Application.Current.FindResource("cfmNotFound"));
                 }
-            } else
+            }
+            else
             {
                 switch (RunMethod)
                 {
@@ -145,6 +149,18 @@ namespace IFEOManage
 
 
             return String.Join("; ", Ret);
+        }
+
+        public override string ToString()
+        {
+            StringBuilder Builder = new StringBuilder();
+            Builder.Append("PEName = " + PEName + ", ");
+            Builder.Append("Remark = " + Remark + ", ");
+            Builder.Append("Debugger = " + Debugger + ", ");
+            Builder.Append("ManageByThis = " + ManageByThis + ", ");
+            Builder.Append("RunMethod = " + RunMethod + ", ");
+            Builder.Append("IFEOPath = " + IFEOPath + "");
+            return Builder.ToString();
         }
     }
 
@@ -166,10 +182,6 @@ namespace IFEOManage
             }
         }
 
-        public static string IFEORunPath = System.Environment.CurrentDirectory;
-        public string IFEOExecution = System.Environment.CurrentDirectory + "\\IFEOExecution.exe";
-        private const string IFEORegPath = @"SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\";
-
         /// <summary>
         /// The items
         /// </summary>
@@ -187,10 +199,11 @@ namespace IFEOManage
             if (Debugger.ManageByThis)
             {
                 // Auto Update
-                if (Debugger.Debugger != IFEOExecution)
+                if (Debugger.Debugger != Global.IFEOExecution)
                 {
-                    Debugger.RegKey.SetValue("Debugger", IFEOExecution);
-                    Debugger.RegKey.SetValue("IFEOManage_Path", IFEORunPath);
+                    Log.WriteLine("Refresh Debugger(" + Debugger.PEName + ") From (" + Debugger.Debugger + ") To (" + Global.IFEOExecution + ")");
+                    Debugger.RegKey.SetValue("Debugger", Global.IFEOExecution);
+                    Debugger.RegKey.SetValue("IFEOManage_Path", Global.IFEORunPath);
                 }
                 Debugger.ManageByThis = true;
                 Debugger.Debugger = (string)Application.Current.FindResource("cfmManagedByThis");
@@ -206,7 +219,8 @@ namespace IFEOManage
         /// <returns>The state of load</returns>
         public bool Load()
         {
-            IFEOKey = Registry.LocalMachine.OpenSubKey(IFEORegPath, true);
+            Log.WriteLine("Load registry");
+            IFEOKey = Registry.LocalMachine.OpenSubKey(Global.IFEORegPath, true);
             IFEOItem TempIFEO;
             if (IFEOKey != null)
             {
@@ -234,10 +248,23 @@ namespace IFEOManage
 
                             _FormatDebuggerStringAndUpdate(TempIFEO);
                             Items.Add(TempIFEO);
+                            Log.WriteLine("Load " + keyName + " successfully: " + TempIFEO.ToString());
+                        } else
+                        {
+                            //Log.WriteLine(keyName + " is not a vaild key.");
                         }
 
+                    } else
+                    {
+                        Log.WriteLine("Error when loading Sub Key(" + keyName + ")");
+                        Log.MessageBoxError((string)Application.Current.FindResource("cfmOpenSubKeyError") + "\n" + keyName);
                     }
                 }
+            } else
+            {
+                Log.WriteLine("Cannot open registry");
+                Log.MessageBoxError((string)Application.Current.FindResource("cfmCannotOpenRegistry"));
+                return false;
             }
             return true;
         }
@@ -251,11 +278,20 @@ namespace IFEOManage
         /// <returns>The state of deletion</returns>
         public bool Delete(List<IFEOItem> DeleteList)
         {
+
             if (IFEOKey != null)
             {
                 DeleteList.ForEach(delegate (IFEOItem Item)
                 {
-                    IFEOKey.DeleteSubKeyTree(Item.PEName);
+                    try
+                    {
+                        IFEOKey.DeleteSubKeyTree(Item.PEName);
+                    }
+                    catch (Exception Ex)
+                    {
+                        Log.WriteLine("Error when deleting item: " + Item.PEName + "\n\n" + Ex.ToString());
+                        Log.MessageBoxError((string)Application.Current.FindResource("cfmDeleteError") + "\n" + Item.PEName + "\n\n" + Ex.ToString());
+                    }
                 });
             }
             Load();
@@ -273,7 +309,15 @@ namespace IFEOManage
             {
                 DeleteIDList.ForEach(delegate (int Item)
                 {
-                    IFEOKey.DeleteSubKeyTree(Items[Item].PEName);
+                    try
+                    {
+                        IFEOKey.DeleteSubKeyTree(Items[Item].PEName);
+                    }
+                    catch (Exception Ex)
+                    {
+                        Log.WriteLine("Error when deleting item: " + Items[Item].PEName + "\n\n" + Ex.ToString());
+                        Log.MessageBoxError((string)Application.Current.FindResource("cfmDeleteError") + "\n" + Items[Item].PEName + "\n\n" + Ex.ToString());
+                    }
                 });
             }
             Load();
@@ -289,21 +333,46 @@ namespace IFEOManage
         /// </returns>
         public bool Save(IFEOItem Item)
         {
-            IFEOKey = Registry.LocalMachine.OpenSubKey(IFEORegPath, true);
-            Item.RegKey = IFEOKey.CreateSubKey(Item.PEName);
-            if (Item.Debugger == "")
+
+            Log.WriteLine("Start Saving Key");
+            IFEOKey = Registry.LocalMachine.OpenSubKey(Global.IFEORegPath, true);
+            try
             {
-                Item.RegKey.DeleteValue("Debugger");
+                Item.RegKey = IFEOKey.CreateSubKey(Item.PEName);
+                Log.WriteLine("Create Sub Key(" + Item.PEName + ") Successfully.");
             }
-            else
+            catch (Exception Ex)
             {
-                Item.RegKey.SetValue("Debugger", Item.Debugger);
+                Log.WriteLine("Error when creating Sub Key(" + Item.PEName + "): " + Ex.ToString());
+                Log.MessageBoxError((string)Application.Current.FindResource("cfmOpenSubKeyError") + "\n" + Item.PEName + "\n\n" + Ex.ToString());
+                return false;
             }
-            Item.RegKey.SetValue("IFEOManage_Path", IFEORunPath);
+
+            try
+            {
+                if (Item.Debugger == "")
+                {
+                    Item.RegKey.DeleteValue("Debugger");
+                }
+                else
+                {
+                    Item.RegKey.SetValue("Debugger", Item.Debugger);
+                }
+            }
+
+            catch (Exception Ex)
+            {
+                Log.WriteLine("Error when creating Debugger: " + Ex.ToString());
+                Log.MessageBoxError((string)Application.Current.FindResource("cfmCreateDebuggerError") + "\n" + Item.PEName + "\n\n" + Ex.ToString());
+                return false;
+            }
+
+            Item.RegKey.SetValue("IFEOManage_Path", Global.IFEORunPath);
             Item.RegKey.SetValue("IFEOManage_Remark", Item.Remark);
             Item.RegKey.SetValue("IFEOManage_Manage", Item.ManageByThis);
             Item.RegKey.SetValue("IFEOManage_RunMethod", Item.RunMethod);
             Item.RegKey.Close();
+            Log.WriteLine("Saved key: " + Item.ToString());
             Load();
             return true;
         }

@@ -1,4 +1,6 @@
-﻿using System;
+﻿using IFEOGlobal;
+using Microsoft.Win32;
+using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
@@ -22,21 +24,44 @@ namespace IFEOExecution
         private void Application_Startup(object sender, StartupEventArgs e)
         {
             Arguments = e.Args;
+            Log.WriteLine("Started IFEOExecution" + ((Global.IsAdministrator()) ? "(Administrator)" : "") + " with :" + Environment.CommandLine);
             if (Arguments.Length == 0)
             {
                 Process.Start("IFEOManage.exe");
                 Environment.Exit(0);
             }
-
+            
             Uri BaseUri = new Uri(System.IO.Directory.GetCurrentDirectory());
             Uri ProgramName = new Uri(BaseUri, Arguments[0]);
+            Log.WriteLine("Get absolute path: " + ProgramName.AbsolutePath) ;
             if (!File.Exists(ProgramName.AbsolutePath))
             {
+                Log.WriteLine("Path not found.");
                 MessageBox.Show((string)FindResource("cfmNotFound"), "IFEOExecution", MessageBoxButton.OK, MessageBoxImage.Error);
                 Environment.Exit(1);
             } else
             {
-                new MainWindow().Show();
+                Config.Load();
+                string FileName = Path.GetFileName(ProgramName.LocalPath);
+                Log.WriteLine("Opening " + Global.IFEORegPath + FileName);
+                RegistryKey IFEOKey = Registry.LocalMachine.OpenSubKey(Global.IFEORegPath + FileName);
+                object KeyValue = IFEOKey.GetValue("IFEOManage_RunMethod");
+                bool Popop = false;
+                if (KeyValue != null)
+                {
+                    if ((RunMethod)Enum.Parse(typeof(RunMethod), (string)KeyValue) == RunMethod.Popup)
+                    {
+                        Log.WriteLine("Open popup window.");
+                        new MainWindow().Show();
+                        Popop = true;
+                    }
+                }
+                if (!Popop)
+                {
+                    Log.WriteLine("Exit.");
+                    Environment.Exit(0);
+                }
+
             }
 
             
