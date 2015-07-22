@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Text;
+using System.Windows;
 using System.Windows.Data;
 
 namespace IFEOManage
@@ -27,26 +28,35 @@ namespace IFEOManage
             throw new NotSupportedException();
         }
     }
-
     /// <summary>
-    /// Convert ListView's index to Boolean
+    /// Convert Enum to Boolean
     /// </summary>
-    [ValueConversion(typeof(int), typeof(bool))]
-    public class IndexToBooleanConverter : IValueConverter
+    public class EnumBooleanConverter : IValueConverter
     {
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        #region IValueConverter Members
+        public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
-            if (targetType != typeof(int))
-                throw new InvalidOperationException("The target must be a number");
+            string parameterString = parameter as string;
+            if (parameterString == null)
+                return DependencyProperty.UnsetValue;
 
-            System.Windows.MessageBox.Show((string)value);
-            return ((int)value == 0 ? false : true);
+            if (Enum.IsDefined(value.GetType(), value) == false)
+                return DependencyProperty.UnsetValue;
+
+            object parameterValue = Enum.Parse(value.GetType(), parameterString);
+
+            return parameterValue.Equals(value);
         }
 
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
-            throw new NotSupportedException();
+            string parameterString = parameter as string;
+            if (parameterString == null)
+                return DependencyProperty.UnsetValue;
+
+            return Enum.Parse(targetType, parameterString);
         }
+        #endregion
     }
 
     [ValueConversion(typeof(string), typeof(Uri))]

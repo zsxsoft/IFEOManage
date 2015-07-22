@@ -5,12 +5,15 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:IFEOManage"
         mc:Ignorable="d"
-        Title="{DynamicResource DetailTitle}" Width="600" Height="250">
+        Title="{DynamicResource DetailTitle}" Width="600" Height="350">
     <Window.Resources>
         <local:InverseBooleanConverter x:Key="InverseBooleanConverter" />
+        <local:EnumBooleanConverter x:Key="EnumBooleanConverter" />
     </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
+            <RowDefinition></RowDefinition>
+            <RowDefinition></RowDefinition>
             <RowDefinition></RowDefinition>
             <RowDefinition></RowDefinition>
             <RowDefinition></RowDefinition>
@@ -41,11 +44,31 @@
             </Button>
         </Grid>
         <Grid Grid.Row="2">
-            <CheckBox x:Name="chkManageByThis" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" IsChecked="{Binding Path=ManageByThis}" Checked="chkManageByThis_Checked">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="100"/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Label Grid.Column="0" Content="{DynamicResource lstRemark}" Margin="7,12,10,12"/>
+            <TextBox Grid.Column="1" x:Name="txtRemark" Margin="0,15,5,20" Text="{Binding Path=Remark, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></TextBox>
+        </Grid>
+        <Grid Grid.Row="3">
+            <CheckBox x:Name="chkManageByThis" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10,0,0,0" IsChecked="{Binding Path=ManageByThis}" Checked="chkManageByThis_Checked">
                 <AccessText Text="{DynamicResource chkManage}"></AccessText>
             </CheckBox>
         </Grid>
-        <Grid Grid.Row="3">
+        <Grid Grid.Row="4">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="100"/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Label Grid.Column="0" Content="{DynamicResource optStartAction}" Margin="7,12,0,12"/>
+            <RadioButton x:Name="RadioStartup1" GroupName="StartupGroup" VerticalAlignment="Center" Grid.Column="1" IsChecked="{Binding Path=RunMethod, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=Close}" IsEnabled="{Binding Path=IsChecked, ElementName=chkManageByThis}">
+                <TextBlock Text="{DynamicResource cfmExitDirectly}"></TextBlock></RadioButton>
+            <RadioButton x:Name="RadioStartup2" GroupName="StartupGroup" VerticalAlignment="Center" Grid.Column="2" IsChecked="{Binding Path=RunMethod, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=Popup}" IsEnabled="{Binding Path=IsChecked, ElementName=chkManageByThis}">
+                <TextBlock Text="{DynamicResource cfmPopup}"></TextBlock></RadioButton>
+        </Grid>
+        <Grid Grid.Row="5">
             <Button x:Name="btnSave" HorizontalAlignment="Center" VerticalAlignment="Center" Click="btnSave_Click" Width="122" Height="30" >
                 <AccessText Text="{DynamicResource btnSave}"></AccessText>
             </Button>

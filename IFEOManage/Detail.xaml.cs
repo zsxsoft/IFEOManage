@@ -40,6 +40,8 @@ namespace IFEOManage
                     this.PEPath = Item.PEName;
                     this.DebuggerPath = Item.Debugger;
                     this.ManageByThis = Item.ManageByThis;
+                    this.RunMethod = Item.RunMethod;
+                    this.Remark = Item.Remark;
                 }
                 
                 OnPropertyChanged(new PropertyChangedEventArgs("ID"));
@@ -67,6 +69,27 @@ namespace IFEOManage
             }
         }
 
+        private RunMethod _RunMethod;
+        /// <summary>
+        /// Gets or sets the running method
+        /// </summary>
+        /// <value>
+        /// The running method
+        /// </value>
+        public RunMethod RunMethod
+        {
+            get
+            {
+                return _RunMethod;
+            }
+            set
+            {
+                if (_RunMethod == value) return;
+                _RunMethod = value;
+                OnPropertyChanged(new PropertyChangedEventArgs("RunMethod"));
+            }
+        }
+
         private string _DebuggerPath;
         /// <summary>
         /// Gets or sets the debugger path.
@@ -85,6 +108,27 @@ namespace IFEOManage
                 if (_DebuggerPath == value) return;
                 _DebuggerPath = value;
                 OnPropertyChanged(new PropertyChangedEventArgs("DebuggerPath"));
+            }
+        }
+
+        private string _Remark;
+        /// <summary>
+        /// Gets or sets the remark
+        /// </summary>
+        /// <value>
+        /// The remark
+        /// </value>
+        public string Remark
+        {
+            get
+            {
+                return _Remark;
+            }
+            set
+            {
+                if (_Remark == value) return;
+                _Remark = value;
+                OnPropertyChanged(new PropertyChangedEventArgs("Remark"));
             }
         }
 
@@ -135,7 +179,9 @@ namespace IFEOManage
             Data.ID = 0;
             Data.PEPath = "";
             Data.DebuggerPath = "";
+            Data.Remark = "";
             Data.ManageByThis = true;
+            Data.RunMethod = RunMethod.Close;
         }
 
         public Detail()
@@ -145,7 +191,10 @@ namespace IFEOManage
             InitializeData();
             txtDebugger.DataContext = Data;
             txtPEName.DataContext = Data;
+            txtRemark.DataContext = Data;
             chkManageByThis.DataContext = Data;
+            RadioStartup1.DataContext = Data;
+            RadioStartup2.DataContext = Data;
         }
 
         private void btnOpenPESelector_Click(object sender, RoutedEventArgs e)
@@ -201,10 +250,11 @@ namespace IFEOManage
             }
             
             Item.PEName = Data.PEPath;
-
+            Item.Remark = Data.Remark;
+            Item.RunMethod = Data.RunMethod;
 
             IFEO.Save(Item);
-            Data = new DetailData(); // Refresh it
+            InitializeData(); // Refresh it
         }
     }
 }

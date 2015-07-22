@@ -13,20 +13,23 @@
     
     <!-- Global Lang -->
 
-    <s:String x:Key="mnuRefresh">刷新</s:String>
-    <s:String x:Key="mnuAdd">新建</s:String>
-    <s:String x:Key="mnuModify">修改</s:String>
-    <s:String x:Key="mnuDelete">删除</s:String>
+    <s:String x:Key="mnuRefresh">刷新(_R)</s:String>
+    <s:String x:Key="mnuAdd">新建(_N)</s:String>
+    <s:String x:Key="mnuModify">修改(_M)</s:String>
+    <s:String x:Key="mnuDelete">删除(_D)</s:String>
 
     <s:String x:Key="lstPEName">可执行文件名</s:String>
     <s:String x:Key="lstDebugger">指向文件</s:String>
     <s:String x:Key="lstRemark">备注</s:String>
     
     <s:String x:Key="btnBrowse">浏览(_B)</s:String>
-    <s:String x:Key="btnBrowse2">浏览(_R)</s:String>
+    <s:String x:Key="btnBrowse2">浏览(_W)</s:String>
     <s:String x:Key="btnSave">保存(_S)</s:String>
 
     <s:String x:Key="cfmManagedByThis">由IFEOManage管理</s:String>
+    
+    <s:String x:Key="cfmPopup">弹出提示</s:String>
+    <s:String x:Key="cfmExitDirectly">直接退出</s:String>
     
     <!-- Main Window Start  -->
     <s:String x:Key="MainWindowTitle">IFEOManage</s:String>
@@ -36,4 +39,5 @@
     <!-- Detail Start -->
     <s:String x:Key="DetailTitle">映像劫持信息调整</s:String>
     <s:String x:Key="chkManage">将其交由_IFEOManage进行管理</s:String>
+    <s:String x:Key="optStartAction">程序启动操作</s:String>
 </ResourceDictionary>

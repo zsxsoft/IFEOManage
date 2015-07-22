@@ -9,6 +9,10 @@ using System.Windows;
 
 namespace IFEOManage
 {
+    public enum RunMethod {
+        Close = 0,
+        Popup = 1
+    }
     /// <summary>
     /// IFEOItem
     /// </summary>
@@ -75,6 +79,14 @@ namespace IFEOManage
         /// </value>
         public bool ManageByThis { get; set; } = true;
 
+        /// <summary>
+        /// Gets or sets the running method
+        /// </summary>
+        /// <value>
+        /// The running method
+        /// </value>
+        public RunMethod RunMethod { get; set; } = RunMethod.Close;
+
         private string _IFEOPath;
         /// <summary>
         /// Gets the IFEOManage path.
@@ -122,7 +134,20 @@ namespace IFEOManage
                 {
                     Ret.Add((string)Application.Current.FindResource("cfmNotFound"));
                 }
+            } else
+            {
+                switch (RunMethod)
+                {
+                    case RunMethod.Close:
+                        Ret.Add((string)Application.Current.FindResource("cfmExitDirectly"));
+                        break;
+                    case RunMethod.Popup:
+                        Ret.Add((string)Application.Current.FindResource("cfmPopup"));
+                        break;
+                }
             }
+
+
             return String.Join("; ", Ret);
         }
     }
@@ -198,6 +223,12 @@ namespace IFEOManage
                             TempIFEO.Debugger = SubKey.GetValue("debugger").ToString();
                             TempIFEO.Remark = (string)GetValue(SubKey, "IFEOManage_Remark");
 
+                            string RunMethodString = (string)GetValue(SubKey, "IFEOManage_RunMethod");
+                            if (RunMethodString != "")
+                            {
+                                TempIFEO.RunMethod = (RunMethod)Enum.Parse(TempIFEO.RunMethod.GetType(), RunMethodString);
+                            }
+
                             _FormatDebuggerString(TempIFEO);
                             Items.Add(TempIFEO);
                         }
@@ -268,6 +299,7 @@ namespace IFEOManage
             Item.RegKey.SetValue("IFEOManage_Path", IFEORunPath);
             Item.RegKey.SetValue("IFEOManage_Remark", Item.Remark);
             Item.RegKey.SetValue("IFEOManage_Manage", Item.ManageByThis);
+            Item.RegKey.SetValue("IFEOManage_RunMethod", Item.RunMethod);
             Item.RegKey.Close();
             Load();
             return true;
