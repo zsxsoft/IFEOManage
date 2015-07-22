@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using Microsoft.Win32;
-using System.ComponentModel;
 using System.Collections.ObjectModel;
 using System.Windows;
 
@@ -171,7 +169,7 @@ namespace IFEOManage
         }
 
         public static string IFEORunPath = System.Environment.CurrentDirectory;
-        public string IFEOExecution = System.Environment.CurrentDirectory + "\\IEFOExecution.exe";
+        public string IFEOExecution = System.Environment.CurrentDirectory + "\\IFEOExecution.exe";
         private const string IFEORegPath = @"SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\";
 
         /// <summary>
@@ -194,6 +192,7 @@ namespace IFEOManage
                 if (Debugger.Debugger != IFEOExecution)
                 {
                     Debugger.RegKey.SetValue("Debugger", IFEOExecution);
+                    Debugger.RegKey.SetValue("IFEOManage_Path", IFEORunPath);
                 }
                 Debugger.ManageByThis = true;
                 Debugger.Debugger = (string)Application.Current.FindResource("cfmManagedByThis");
@@ -219,7 +218,7 @@ namespace IFEOManage
                     RegistryKey SubKey = IFEOKey.OpenSubKey(keyName, true);
                     if (SubKey != null)
                     {
-                        if (SubKey.GetValueNames().ToList().IndexOf("debugger") > -1)
+                        if (SubKey.GetValueNames().ToList().ConvertAll(d => d.ToLower()).IndexOf("debugger") > -1)
                         {
                             TempIFEO = new IFEOItem();
                             TempIFEO.ManageByThis = ((string)GetValue(SubKey, "IFEOManage_Manage") == "True");

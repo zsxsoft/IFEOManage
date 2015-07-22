@@ -13,7 +13,7 @@
         </Grid.RowDefinitions>
         <Grid Grid.Row="0">
             <TextBlock HorizontalAlignment="Left" Margin="30,25,0,0" TextWrapping="Wrap" Text="{DynamicResource WarningLine1}" VerticalAlignment="Top"/>
-            <TextBlock HorizontalAlignment="Left" Margin="30,45,0,0" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Top"/>
+            <TextBlock x:Name="TxtArgumentString" HorizontalAlignment="Left" Margin="30,45,0,0" TextWrapping="Wrap" Text="Argument" VerticalAlignment="Top"/>
 
         </Grid>
         <Grid Grid.Row="1" VerticalAlignment="Bottom">
@@ -21,7 +21,7 @@
             <Button x:Name="btnExit" Content="{DynamicResource btnClose}" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,10,5" Width="75" Height="36" Click="btnExit_Click"/>
 
             <Grid Margin="25,0,0,15">
-                <TextBlock Grid.Column="0" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Timer" VerticalAlignment="Bottom"/>
+                <TextBlock x:Name="TxtTimerUpdate" Grid.Column="0" HorizontalAlignment="Left" TextWrapping="Wrap" Text="{DynamicResource txtClosingTime}" VerticalAlignment="Bottom"/>
             </Grid>
 
         </Grid>
