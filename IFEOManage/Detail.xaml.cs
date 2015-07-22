@@ -190,8 +190,16 @@ namespace IFEOManage
             Data.PEPath = Data.PEPath.Trim();
             if (Data.PEPath == "") return;
             IFEOItem Item = new IFEOItem();
-            Item.Debugger = Data.DebuggerPath;
+
             Item.ManageByThis = Data.ManageByThis;
+            if (Data.ManageByThis)
+            {
+                Item.Debugger = IFEO.IFEOExecution;
+            } else
+            {
+                Item.Debugger = Data.DebuggerPath;
+            }
+            
             Item.PEName = Data.PEPath;
 
 

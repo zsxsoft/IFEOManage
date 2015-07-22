@@ -5,6 +5,7 @@ using System.Text;
 using Microsoft.Win32;
 using System.ComponentModel;
 using System.Collections.ObjectModel;
+using System.Windows;
 
 namespace IFEOManage
 {
@@ -111,7 +112,7 @@ namespace IFEOManage
         public ObservableCollection<IFEOItem> Items = new ObservableCollection<IFEOItem>();
 
 
-        private string GetValue(RegistryKey RegKey, string Key)
+        private object GetValue(RegistryKey RegKey, string Key)
         {
             object Value = RegKey.GetValue(Key);
             return Value == null ? "" : Value.ToString();
@@ -119,11 +120,10 @@ namespace IFEOManage
 
         private void _FormatDebuggerString(IFEOItem Debugger)
         {
-            string OriginalDebugger = Debugger.Debugger;
-            Debugger.Debugger = Debugger.Debugger.Replace(Debugger.IFEOPath, "{%Path%}");
-            if (OriginalDebugger != Debugger.Debugger)
+            if (Debugger.ManageByThis)
             {
                 Debugger.ManageByThis = true;
+                Debugger.Debugger = (string)Application.Current.FindResource("cfmManagedByThis");
             }
         }
 
@@ -148,12 +148,12 @@ namespace IFEOManage
                         if (SubKey.GetValueNames().ToList().IndexOf("debugger") > -1)
                         {
                             TempIFEO = new IFEOItem();
-                            TempIFEO.ManageByThis = false;
+                            TempIFEO.ManageByThis = ((string)GetValue(SubKey, "IFEOManage_Manage") == "True");
                             TempIFEO.RegKey = SubKey;
-                            TempIFEO.IFEOPath = GetValue(SubKey, "IFEOManage_Path");
+                            TempIFEO.IFEOPath = (string)GetValue(SubKey, "IFEOManage_Path");
                             TempIFEO.PEName = SubKey.Name.Split('\\').Last();
                             TempIFEO.Debugger = SubKey.GetValue("debugger").ToString();
-                            TempIFEO.Remark = GetValue(SubKey, "IFEOManage_Remark");
+                            TempIFEO.Remark = (string)GetValue(SubKey, "IFEOManage_Remark");
 
                             _FormatDebuggerString(TempIFEO);
                             Items.Add(TempIFEO);
@@ -224,6 +224,7 @@ namespace IFEOManage
             }
             Item.RegKey.SetValue("IFEOManage_Path", IFEORunPath);
             Item.RegKey.SetValue("IFEOManage_Remark", Item.Remark);
+            Item.RegKey.SetValue("IFEOManage_Manage", Item.ManageByThis);
             Item.RegKey.Close();
             Load();
             return true;

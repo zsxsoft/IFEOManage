@@ -17,6 +17,8 @@
     <s:String x:Key="btnBrowse">浏览(_B)</s:String>
     <s:String x:Key="btnBrowse2">浏览(_R)</s:String>
     <s:String x:Key="btnSave">保存(_S)</s:String>
+
+    <s:String x:Key="cfmManagedByThis">由IFEOManage管理</s:String>
     
     <!-- Main Window Start  -->
     <s:String x:Key="MainWindowTitle">IFEOManage</s:String>
