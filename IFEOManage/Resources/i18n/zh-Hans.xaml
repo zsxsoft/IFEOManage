@@ -17,6 +17,7 @@
     <s:String x:Key="mnuAdd">新建(_N)</s:String>
     <s:String x:Key="mnuModify">修改(_M)</s:String>
     <s:String x:Key="mnuDelete">删除(_D)</s:String>
+    <s:String x:Key="mnuExport">导出(_E)</s:String>
 
     <s:String x:Key="lstPEName">可执行文件名</s:String>
     <s:String x:Key="lstDebugger">指向文件</s:String>

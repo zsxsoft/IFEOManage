@@ -20,6 +20,8 @@
             <ListView.ContextMenu>
                 <ContextMenu>
                     <MenuItem Header="{DynamicResource mnuRefresh}" Click="mnuRefresh_Click"/>
+
+                    <Separator />
                     <MenuItem Header="{DynamicResource mnuAdd}" Click="mnuAdd_Click"/>
                     <MenuItem Header="{DynamicResource mnuModify}" Click="mnuModify_Click">
                         <!-- I gave up!! -->
@@ -35,6 +37,8 @@
                         </MenuItem.Style>-->
                     </MenuItem>
                     <MenuItem Header="{DynamicResource mnuDelete}" Click="mnuDelete_Click"/>
+                    <Separator />
+                    <MenuItem Header="{DynamicResource mnuExport}" Click="mnuExport_Click"/>
                 </ContextMenu>
             </ListView.ContextMenu>
             <ListView.View>

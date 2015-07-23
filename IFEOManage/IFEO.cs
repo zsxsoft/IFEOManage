@@ -6,6 +6,8 @@ using System.Collections.ObjectModel;
 using System.Windows;
 using IFEOGlobal;
 using System.Text;
+using System.Diagnostics;
+using System.IO;
 
 namespace IFEOManage
 {
@@ -249,18 +251,21 @@ namespace IFEOManage
                             _FormatDebuggerStringAndUpdate(TempIFEO);
                             Items.Add(TempIFEO);
                             Log.WriteLine("Load " + keyName + " successfully: " + TempIFEO.ToString());
-                        } else
+                        }
+                        else
                         {
                             //Log.WriteLine(keyName + " is not a vaild key.");
                         }
 
-                    } else
+                    }
+                    else
                     {
                         Log.WriteLine("Error when loading Sub Key(" + keyName + ")");
                         Log.MessageBoxError((string)Application.Current.FindResource("cfmOpenSubKeyError") + "\n" + keyName);
                     }
                 }
-            } else
+            }
+            else
             {
                 Log.WriteLine("Cannot open registry");
                 Log.MessageBoxError((string)Application.Current.FindResource("cfmCannotOpenRegistry"));
@@ -375,6 +380,30 @@ namespace IFEOManage
             Log.WriteLine("Saved key: " + Item.ToString());
             Load();
             return true;
+        }
+
+        /// <summary>
+        /// Exports the specified items.
+        /// </summary>
+        /// <param name="Items">The items.</param>
+        /// <param name="OutputFile">The output file.</param>
+        public void Export(List<IFEOItem> Items, string OutputFile)
+        {
+            List<string> RegKey = new List<string>();
+            RegKey.Add("Windows Registry Editor Version 5.00");
+            Items.ForEach(delegate (IFEOItem Item)
+            {
+                string RegFileName = "Temp_" + Item.PEName + ".reg";
+                ProcessStartInfo Start = new ProcessStartInfo();
+                Start.FileName = "regedit.exe";
+                Start.Arguments = "/e " + "\"" + RegFileName + "\" " + " \"HKEY_LOCAL_MACHINE\\" + Global.IFEORegPath + Item.PEName + "\"";
+                Process RegProcess = Process.Start(Start);
+                RegProcess.WaitForExit();
+
+                RegKey.Add(File.ReadAllText(RegFileName).Replace("Windows Registry Editor Version 5.00", ""));
+                File.Delete(RegFileName);
+            });
+            File.WriteAllText(OutputFile, string.Join(Environment.NewLine, RegKey));
         }
     }
 }

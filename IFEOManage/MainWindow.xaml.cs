@@ -38,6 +38,7 @@ namespace IFEOManage
 
         private void mnuModify_Click(object sender, RoutedEventArgs e)
         {
+            if (listView.SelectedIndex == -1) return;
             List<IFEOItem> Items = listView.SelectedItems.Cast<IFEOItem>().ToList();
             Items.ForEach(delegate(IFEOItem Item)
             {
@@ -49,6 +50,7 @@ namespace IFEOManage
 
         private void mnuDelete_Click(object sender, RoutedEventArgs e)
         {
+            if (listView.SelectedIndex == -1) return;
             List<int> SelectedItems = new List<int>();
             List<IFEOItem> Items = listView.SelectedItems.Cast<IFEOItem>().ToList();
 
@@ -79,6 +81,18 @@ namespace IFEOManage
         private void TranslationHyperLink_RequestNavigate(object sender, RequestNavigateEventArgs e)
         {
             Process.Start((string)FindResource("TranslationAuthorUri"));
+        }
+
+        private void mnuExport_Click(object sender, RoutedEventArgs e)
+        {
+            if (listView.SelectedIndex == -1) return;
+            Microsoft.Win32.SaveFileDialog ofd = new Microsoft.Win32.SaveFileDialog();
+            ofd.DefaultExt = ".reg";
+            ofd.Filter = "Importing Registration Entries|*.reg";
+            if (ofd.ShowDialog() != true) return;
+            if (ofd.FileName == "") return;
+            List<IFEOItem> Items = listView.SelectedItems.Cast<IFEOItem>().ToList();
+            IFEO.Export(Items, ofd.FileName);
         }
     }
 }
