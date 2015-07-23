@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:IFEOManage"
         mc:Ignorable="d"
-        Title="{DynamicResource MainWindowTitle}" Width="800" Height="400" Closed="Window_Closed">
+        Title="{DynamicResource MainWindowTitle}" Width="800" Height="400" Closed="Window_Closed" KeyDown="Window_KeyDown">
     <Window.Resources>
     </Window.Resources>
     <Grid Margin="20">
@@ -16,7 +16,7 @@
             <RowDefinition Height="*"/>
             <RowDefinition Height="40"/>
         </Grid.RowDefinitions>
-        <ListView x:Name="listView" Grid.Row="0">
+        <ListView x:Name="listView" Grid.Row="0" SelectionMode="Extended" KeyDown="listView_KeyDown" >
             <ListView.ContextMenu>
                 <ContextMenu>
                     <MenuItem Header="{DynamicResource mnuRefresh}" Click="mnuRefresh_Click"/>

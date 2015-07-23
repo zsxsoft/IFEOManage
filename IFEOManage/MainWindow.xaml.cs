@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Windows;
+using System.Windows.Input;
 using System.Windows.Navigation;
 
 namespace IFEOManage
@@ -18,7 +19,7 @@ namespace IFEOManage
         {
             InitializeComponent();
             IFEO.Load();
-            listView.ItemsSource = IFEO.Items;  
+            listView.ItemsSource = IFEO.Items;
 
 
             Version ThisVersion = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
@@ -40,7 +41,7 @@ namespace IFEOManage
         {
             if (listView.SelectedIndex == -1) return;
             List<IFEOItem> Items = listView.SelectedItems.Cast<IFEOItem>().ToList();
-            Items.ForEach(delegate(IFEOItem Item)
+            Items.ForEach(delegate (IFEOItem Item)
             {
                 Detail WindowDetail = new Detail();
                 WindowDetail.Data.ID = IFEO.Items.IndexOf(Item);
@@ -93,6 +94,20 @@ namespace IFEOManage
             if (ofd.FileName == "") return;
             List<IFEOItem> Items = listView.SelectedItems.Cast<IFEOItem>().ToList();
             IFEO.Export(Items, ofd.FileName);
+        }
+
+        private void listView_KeyDown(object sender, KeyEventArgs e)
+        {
+            if ((Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl)) && Keyboard.IsKeyDown(Key.A))
+            {
+                listView.SelectAll();
+            }
+        }
+
+        private void Window_KeyDown(object sender, KeyEventArgs e)
+        {
+            listView.Focus();
+            listView_KeyDown(sender, e);
         }
     }
 }
