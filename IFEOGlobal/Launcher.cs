@@ -1,9 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
+using System.Security;
+using System.Security.Permissions;
 using System.Text;
+using System.Windows;
 
 namespace IFEOGlobal
 {
@@ -95,15 +99,7 @@ namespace IFEOGlobal
                 }
                 else
                 {
-                    // Try run as administrator.
-                    ProcessStartInfo startInfo = new ProcessStartInfo();
-                    startInfo.UseShellExecute = true;
-                    startInfo.WorkingDirectory = Environment.CurrentDirectory;
-                    startInfo.FileName = Process.GetCurrentProcess().MainModule.FileName;
-                    startInfo.Arguments = string.Join(" ", Environment.CommandLine.Split(' ').Skip(1));
-                    startInfo.Verb = "runas";
-                    Log.WriteLine("Try runas administrator");
-                    Process.Start(startInfo);
+                    RestartWithAdministrator();
                 }
             }
             Log.WriteLine("Try Stop Debugging");
@@ -111,6 +107,57 @@ namespace IFEOGlobal
             CloseHandle(PInfo.hProcess);
             CloseHandle(PInfo.hThread);
             Log.WriteLine("Created Process.");
+        }
+
+
+
+        /// <summary>
+        /// Restarts this instance with administrator right.
+        /// Copied from .NET source code: winforms\Managed\System\WinForms\Application.cs
+        /// </summary>
+        /// 
+        public static void RestartWithAdministrator()
+        {
+
+            String[] arguments = Environment.GetCommandLineArgs();
+            Debug.Assert(arguments != null && arguments.Length > 0);
+            StringBuilder sb = new StringBuilder((arguments.Length - 1) * 16);
+            for (int argumentIndex = 1; argumentIndex < arguments.Length - 1; argumentIndex++)
+            {
+                sb.Append('"');
+                sb.Append(arguments[argumentIndex]);
+                sb.Append("\" ");
+            }
+            if (arguments.Length > 1)
+            {
+                sb.Append('"');
+                sb.Append(arguments[arguments.Length - 1]);
+                sb.Append('"');
+            }
+            ProcessStartInfo currentStartInfo = Process.GetCurrentProcess().StartInfo;
+            currentStartInfo.FileName = Process.GetCurrentProcess().MainModule.FileName;
+            // [....]: use this according to spec.
+            // String executable = Assembly.GetEntryAssembly().CodeBase;
+            // Debug.Assert(executable != null);
+            if (sb.Length > 0)
+            {
+                currentStartInfo.Arguments = sb.ToString();
+            }
+            currentStartInfo.Verb = "runas";
+            Log.WriteLine("Try runas administrator: " + currentStartInfo.Arguments);
+            try
+            {
+                Process.Start(currentStartInfo);
+            }
+            catch (System.ComponentModel.Win32Exception Ex)
+            {
+                Log.WriteLine("Exception: " + Ex.ToString());
+            }
+            finally
+            {
+                Environment.Exit(0);
+            }
+
         }
 
 

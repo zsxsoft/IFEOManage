@@ -27,22 +27,41 @@ namespace IFEOExecution
             Log.WriteLine("Started IFEOExecution" + ((Global.IsAdministrator()) ? "(Administrator)" : "") + " with :" + Environment.CommandLine);
             if (Arguments.Length == 0)
             {
-                Process.Start("IFEOManage.exe");
-                Environment.Exit(0);
+                try {
+                    Process.Start("IFEOManage.exe");
+                }
+                catch
+                {
+                    // Eat it
+                }
+                finally
+                {
+                    Environment.Exit(0);
+                }
+                
             }
             
-            Uri BaseUri = new Uri(System.IO.Directory.GetCurrentDirectory());
+            Uri BaseUri = new Uri(System.IO.Directory.GetCurrentDirectory() + "/");
             Uri ProgramName = new Uri(BaseUri, Arguments[0]);
-            Log.WriteLine("Get absolute path: " + ProgramName.AbsolutePath) ;
-            if (!File.Exists(Uri.UnescapeDataString(ProgramName.AbsolutePath)))
+            string FileName = Path.GetFileName(ProgramName.LocalPath);
+            string FilePath = Uri.UnescapeDataString(ProgramName.AbsolutePath);
+            if (FileName.ToLower().IndexOf(".") < 0)
+            {
+                FileName += ".exe";
+                FilePath += ".exe";
+            }
+
+            Log.WriteLine("Get absolute path: " + FilePath) ;
+            Log.WriteLine("FileName: " + FileName);
+            if (!File.Exists(FilePath))
             {
                 Log.WriteLine("Path not found.");
-                MessageBox.Show((string)FindResource("cfmNotFound"), "IFEOExecution", MessageBoxButton.OK, MessageBoxImage.Error);
+                //MessageBox.Show((string)FindResource("cfmNotFound"), "IFEOExecution", MessageBoxButton.OK, MessageBoxImage.Error);
                 Environment.Exit(1);
             } else
             {
                 Config.Load();
-                string FileName = Path.GetFileName(ProgramName.LocalPath);
+                
                 Log.WriteLine("Opening " + Global.IFEORegPath + FileName);
                 RegistryKey IFEOKey = Registry.LocalMachine.OpenSubKey(Global.IFEORegPath + FileName);
                 object KeyValue = IFEOKey.GetValue("IFEOManage_RunMethod");
