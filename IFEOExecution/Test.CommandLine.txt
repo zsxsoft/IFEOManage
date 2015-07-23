@@ -1,0 +1,8 @@
+﻿Z:\IFEOTest.exe --- AnyPath
+"Z:\IFEOTest.exe" --- AnyPath
+IFEOTest.exe --- Z:\
+IFEOTest --- Z:\
+"Z:\IFEOTest.exe" "abc" "efg" --- AnyPath
+IFEOTest "abc" "ef g" --- Z:\
+IFEOTest.scr "abc" "efg" --- Z:\
+"Z:\Te st\IFEOTest.scr" 233 --- AnyPath
