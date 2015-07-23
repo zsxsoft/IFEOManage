@@ -9,6 +9,7 @@
     <Window.Resources>
         <local:InverseBooleanConverter x:Key="InverseBooleanConverter" />
         <local:EnumBooleanConverter x:Key="EnumBooleanConverter" />
+        <local:HasNotKeyConverter x:Key="HasNotKeyConverter" />
     </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
@@ -26,8 +27,8 @@
                 <ColumnDefinition Width="100"/>
             </Grid.ColumnDefinitions>
             <Label Grid.Column="0" Content="{DynamicResource lstPEName}" Margin="7,12,10,12"/>
-            <TextBox Grid.Column="1" x:Name="txtPEName" Margin="0,15,0,20" Text="{Binding Path=PEPath, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-            <Button Grid.Column="2" x:Name="btnOpenPESelector" Margin="5,14,5,20" Click="btnOpenPESelector_Click" >
+            <TextBox Grid.Column="1" x:Name="txtPEName" Margin="0,15,0,20" Text="{Binding Path=PEPath, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding Path=PEPath, Converter={StaticResource HasNotKeyConverter}, Mode=OneTime}"/>
+            <Button Grid.Column="2" x:Name="btnOpenPESelector" Margin="5,14,5,20" Click="btnOpenPESelector_Click"  IsEnabled="{Binding Path=PEPath, Converter={StaticResource HasNotKeyConverter}, Mode=OneTime}">
                 <AccessText Text="{DynamicResource btnBrowse}"></AccessText>
             </Button>
         </Grid>
@@ -62,7 +63,7 @@
                 <ColumnDefinition/>
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
-            <Label Grid.Column="0" Content="{DynamicResource optStartAction}" Margin="7,12,0,12"/>
+            <Label Grid.Column="0" Content="{DynamicResource optStartAction}" VerticalAlignment="Center" Margin="7,12,10,12"/>
             <RadioButton x:Name="RadioStartup1" GroupName="StartupGroup" VerticalAlignment="Center" Grid.Column="1" IsChecked="{Binding Path=RunMethod, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=Close}" IsEnabled="{Binding Path=IsChecked, ElementName=chkManageByThis}">
                 <TextBlock Text="{DynamicResource cfmExitDirectly}"></TextBlock></RadioButton>
             <RadioButton x:Name="RadioStartup2" GroupName="StartupGroup" VerticalAlignment="Center" Grid.Column="2" IsChecked="{Binding Path=RunMethod, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=Popup}" IsEnabled="{Binding Path=IsChecked, ElementName=chkManageByThis}">

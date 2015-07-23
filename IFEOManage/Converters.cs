@@ -56,18 +56,20 @@ namespace IFEOManage
         #endregion
     }
 
-    [ValueConversion(typeof(string), typeof(Uri))]
-    public class StringToUriConverter : IValueConverter
+    /// <summary>
+    /// Inverse Boolean
+    /// </summary>
+    [ValueConversion(typeof(string), typeof(bool))]
+    public class HasNotKeyConverter : IValueConverter
     {
-        public object Convert(object values, Type targetType, object parameter, CultureInfo culture)
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            string uriString = String.Join(string.Empty, values);
-            return new Uri(uriString);
+            return ((string)value == "");
         }
 
-        public object ConvertBack(object value, Type targetTypes, object parameter, CultureInfo culture)
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            throw new NotImplementedException();
+            throw new NotSupportedException();
         }
     }
 }

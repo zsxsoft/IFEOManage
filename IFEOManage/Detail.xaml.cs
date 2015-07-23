@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel;
 using System.Windows;
 using IFEOGlobal;
+using System.IO;
 
 namespace IFEOManage
 {
@@ -36,6 +37,7 @@ namespace IFEOManage
                 }
 
                 OnPropertyChanged(new PropertyChangedEventArgs("ID"));
+                OnPropertyChanged(new PropertyChangedEventArgs("IsEditing"));
             }
         }
 
@@ -144,6 +146,19 @@ namespace IFEOManage
             }
         }
 
+        /// <summary>
+        /// Gets a value indicating whether this instance is editing.
+        /// </summary>
+        /// <value>
+        /// <c>true</c> if this instance is editing; otherwise, <c>false</c>.
+        /// </value>
+        private bool IsEditing
+        {
+            get
+            {
+                return !(ID == -1);
+            }
+        }
 
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -184,6 +199,7 @@ namespace IFEOManage
             txtDebugger.DataContext = Data;
             txtPEName.DataContext = Data;
             txtRemark.DataContext = Data;
+            btnOpenPESelector.DataContext = Data;
             chkManageByThis.DataContext = Data;
             RadioStartup1.DataContext = Data;
             RadioStartup2.DataContext = Data;
@@ -198,7 +214,7 @@ namespace IFEOManage
             {
                 if (ofd.FileName != "")
                 {
-                    Data.PEPath = ofd.FileName;
+                    Data.PEPath = Path.GetFileName(ofd.FileName);
                 }
             }
 

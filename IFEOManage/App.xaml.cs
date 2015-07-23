@@ -16,8 +16,8 @@ namespace IFEOManage
     {
         void Current_DispatcherUnhandledException(object sender, System.Windows.Threading.DispatcherUnhandledExceptionEventArgs e)
         {
-            Log.MessageBoxError(e.ToString());
-            Log.WriteLine(e.ToString());   
+            Log.MessageBoxError(e.Exception.ToString());
+            Log.WriteLine(e.Exception.ToString());   
             e.Handled = true;
         }
     }
