@@ -66,7 +66,7 @@ namespace IFEOManage
 
         private void Window_Closed(object sender, EventArgs e)
         {
-            System.Environment.Exit(0);
+            Environment.Exit(0);
         }
 
         private void AuthorHyperLink_RequestNavigate(object sender, RequestNavigateEventArgs e)

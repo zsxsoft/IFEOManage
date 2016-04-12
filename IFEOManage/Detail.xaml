@@ -5,13 +5,15 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:IFEOManage"
         mc:Ignorable="d"
-        Title="{DynamicResource DetailTitle}" Width="600" Height="350">
+        Title="{DynamicResource DetailTitle}"
+        Width="600"
+        Height="350">
     <Window.Resources>
         <local:InverseBooleanConverter x:Key="InverseBooleanConverter" />
         <local:EnumBooleanConverter x:Key="EnumBooleanConverter" />
         <local:HasNotKeyConverter x:Key="HasNotKeyConverter" />
     </Window.Resources>
-    <Grid>
+    <Grid x:Name="Fuck">
         <Grid.RowDefinitions>
             <RowDefinition></RowDefinition>
             <RowDefinition></RowDefinition>
@@ -27,8 +29,16 @@
                 <ColumnDefinition Width="100"/>
             </Grid.ColumnDefinitions>
             <Label Grid.Column="0" Content="{DynamicResource lstPEName}" Margin="7,12,10,12"/>
-            <TextBox Grid.Column="1" x:Name="txtPEName" Margin="0,15,0,20" Text="{Binding Path=PEPath, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding Path=PEPath, Converter={StaticResource HasNotKeyConverter}, Mode=OneTime}"/>
-            <Button Grid.Column="2" x:Name="btnOpenPESelector" Margin="5,14,5,20" Click="btnOpenPESelector_Click"  IsEnabled="{Binding Path=PEPath, Converter={StaticResource HasNotKeyConverter}, Mode=OneTime}">
+            <TextBox Grid.Column="1"
+                     x:Name="txtPEName" 
+                     Margin="0,15,0,20" 
+                     Text="{Binding Path=PEPath, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                     IsEnabled="{Binding Path=PEPath, Converter={StaticResource HasNotKeyConverter}, Mode=OneTime}"/>
+            <Button Grid.Column="2"
+                    x:Name="btnOpenPESelector"
+                    Margin="5,14,5,20"
+                    Click="btnOpenPESelector_Click" 
+                    IsEnabled="{Binding Path=PEPath, Converter={StaticResource HasNotKeyConverter}, Mode=OneTime}">
                 <AccessText Text="{DynamicResource btnBrowse}"></AccessText>
             </Button>
         </Grid>
@@ -38,9 +48,19 @@
                 <ColumnDefinition/>
                 <ColumnDefinition Width="100"/>
             </Grid.ColumnDefinitions>
-            <Label Grid.Column="0" Content="{DynamicResource lstDebugger}" Margin="7,12,10,12"/>
-            <TextBox Grid.Column="1" x:Name="txtDebugger" Margin="0,15,0,20" Text="{Binding Path=DebuggerPath, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding Path=IsChecked, ElementName=chkManageByThis, Converter={StaticResource InverseBooleanConverter}}"></TextBox>
-            <Button Grid.Column="2" x:Name="btnOpenDebuggerSelector" Margin="5,14,5,20" Click="btnOpenDebuggerSelector_Click"  IsEnabled="{Binding Path=IsChecked, ElementName=chkManageByThis, Converter={StaticResource InverseBooleanConverter}}">
+            <Label Grid.Column="0" 
+                   Content="{DynamicResource lstDebugger}"
+                   Margin="7,12,10,12"/>
+            <TextBox Grid.Column="1"
+                     x:Name="txtDebugger" 
+                     Margin="0,15,0,20"
+                     Text="{Binding Path=DebuggerPath, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+                     IsEnabled="{Binding Path=IsChecked, ElementName=chkManageByThis, Converter={StaticResource InverseBooleanConverter}}"></TextBox>
+            <Button Grid.Column="2" 
+                    x:Name="btnOpenDebuggerSelector"
+                    Margin="5,14,5,20"
+                    Click="btnOpenDebuggerSelector_Click"
+                    IsEnabled="{Binding Path=IsChecked, ElementName=chkManageByThis, Converter={StaticResource InverseBooleanConverter}}">
                 <AccessText Text="{DynamicResource btnBrowse2}"></AccessText>
             </Button>
         </Grid>
@@ -49,11 +69,21 @@
                 <ColumnDefinition Width="100"/>
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
-            <Label Grid.Column="0" Content="{DynamicResource lstRemark}" Margin="7,12,10,12"/>
-            <TextBox Grid.Column="1" x:Name="txtRemark" Margin="0,15,5,20" Text="{Binding Path=Remark, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></TextBox>
+            <Label Grid.Column="0"
+                   Content="{DynamicResource lstRemark}" 
+                   Margin="7,12,10,12"/>
+            <TextBox Grid.Column="1"
+                     x:Name="txtRemark"
+                     Margin="0,15,5,20"
+                     Text="{Binding Path=Remark, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
         </Grid>
         <Grid Grid.Row="3">
-            <CheckBox x:Name="chkManageByThis" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10,0,0,0" IsChecked="{Binding Path=ManageByThis}" Checked="chkManageByThis_Checked">
+            <CheckBox x:Name="chkManageByThis"
+                      HorizontalAlignment="Left"
+                      VerticalAlignment="Center"
+                      Margin="10,0,0,0"
+                      IsChecked="{Binding Path=ManageByThis}"
+                      Checked="chkManageByThis_Checked">
                 <AccessText Text="{DynamicResource chkManage}"></AccessText>
             </CheckBox>
         </Grid>
@@ -63,15 +93,33 @@
                 <ColumnDefinition/>
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
-            <Label Grid.Column="0" Content="{DynamicResource optStartAction}" VerticalAlignment="Center" Margin="7,12,10,12"/>
-            <RadioButton x:Name="RadioStartup1" GroupName="StartupGroup" VerticalAlignment="Center" Grid.Column="1" IsChecked="{Binding Path=RunMethod, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=Close}" IsEnabled="{Binding Path=IsChecked, ElementName=chkManageByThis}">
-                <TextBlock Text="{DynamicResource cfmExitDirectly}"></TextBlock></RadioButton>
-            <RadioButton x:Name="RadioStartup2" GroupName="StartupGroup" VerticalAlignment="Center" Grid.Column="2" IsChecked="{Binding Path=RunMethod, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=Popup}" IsEnabled="{Binding Path=IsChecked, ElementName=chkManageByThis}">
-                <TextBlock Text="{DynamicResource cfmPopup}"></TextBlock></RadioButton>
+            <Label Grid.Column="0" 
+                   Content="{DynamicResource optStartAction}" 
+                   VerticalAlignment="Center" Margin="7,12,10,12"/>
+            <RadioButton x:Name="RadioStartup1"
+                         GroupName="StartupGroup" 
+                         VerticalAlignment="Center" Grid.Column="1"
+                         IsChecked="{Binding Path=RunMethod, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=Close}"
+                         IsEnabled="{Binding Path=IsChecked, ElementName=chkManageByThis}">
+                <TextBlock Text="{DynamicResource cfmExitDirectly}"/>
+            </RadioButton>
+            <RadioButton x:Name="RadioStartup2"
+                         GroupName="StartupGroup"
+                         VerticalAlignment="Center"
+                         Grid.Column="2"
+                         IsChecked="{Binding Path=RunMethod, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=Popup}"
+                         IsEnabled="{Binding Path=IsChecked, ElementName=chkManageByThis}">
+                <TextBlock Text="{DynamicResource cfmPopup}"/>
+            </RadioButton>
         </Grid>
         <Grid Grid.Row="5">
-            <Button x:Name="btnSave" HorizontalAlignment="Center" VerticalAlignment="Center" Click="btnSave_Click" Width="122" Height="30" >
-                <AccessText Text="{DynamicResource btnSave}"></AccessText>
+            <Button x:Name="btnSave" 
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center" 
+                    Click="btnSave_Click" 
+                    Width="122"
+                    Height="30" >
+                <AccessText Text="{DynamicResource btnSave}"/>
             </Button>
         </Grid>
     </Grid>
