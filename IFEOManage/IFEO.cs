@@ -227,7 +227,7 @@ namespace IFEOManage
                     PEName = SubKey.Name.Split('\\').Last(),
                     Debugger = SubKey.GetValue("Debugger").ToString(),
                     Remark = (string)GetValue(SubKey, "IFEOManage_Remark"),
-                    RunMethod= (string)GetValue(SubKey, "IFEOManage_RunMethod")!="" ? (RunMethod)Enum.Parse(GetType(), (string)GetValue(SubKey, "IFEOManage_RunMethod")) : RunMethod.Close,
+                    RunMethod= (string)GetValue(SubKey, "IFEOManage_RunMethod")!="" ? (RunMethod)Enum.Parse(typeof(RunMethod), (string)GetValue(SubKey, "IFEOManage_RunMethod")) : RunMethod.Close,
                 };
                 foreach(var item in items)
                 {
