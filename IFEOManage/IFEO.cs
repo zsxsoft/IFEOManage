@@ -46,7 +46,7 @@ namespace IFEOManage
             get
             {
                 string Extra = GetExtraRemarkString();
-                return  Extra != "" ? $"{Extra};" : Extra +Remark;
+                return Extra != "" ? $"{Extra};" : Extra + Remark;
             }
         }
 
@@ -216,20 +216,20 @@ namespace IFEOManage
             {
                 Items.Clear();
                 var items = from keyName in IFEOKey.GetSubKeyNames()
-                let SubKey = IFEOKey.OpenSubKey(keyName, true)
-                where SubKey != null
-                where SubKey.GetValueNames().ToList().ConvertAll(d => d.ToLower()).IndexOf("debugger") > -1
-                select new IFEOItem
-                {
-                    ManageByThis = ((string)GetValue(SubKey, "IFEOManage_Manage") == "True"),
-                    RegKey = SubKey,
-                    IFEOPath = (string)GetValue(SubKey, "IFEOManage_Path"),
-                    PEName = SubKey.Name.Split('\\').Last(),
-                    Debugger = SubKey.GetValue("Debugger").ToString(),
-                    Remark = (string)GetValue(SubKey, "IFEOManage_Remark"),
-                    RunMethod= (string)GetValue(SubKey, "IFEOManage_RunMethod")!="" ? (RunMethod)Enum.Parse(typeof(RunMethod), (string)GetValue(SubKey, "IFEOManage_RunMethod")) : RunMethod.Close,
-                };
-                foreach(var item in items)
+                            let SubKey = IFEOKey.OpenSubKey(keyName, true)
+                            where SubKey != null
+                            where SubKey.GetValueNames().ToList().ConvertAll(d => d.ToLower()).IndexOf("debugger") > -1
+                            select new IFEOItem
+                            {
+                                ManageByThis = ((string)GetValue(SubKey, "IFEOManage_Manage") == "True"),
+                                RegKey = SubKey,
+                                IFEOPath = (string)GetValue(SubKey, "IFEOManage_Path"),
+                                PEName = SubKey.Name.Split('\\').Last(),
+                                Debugger = SubKey.GetValue("Debugger").ToString(),
+                                Remark = (string)GetValue(SubKey, "IFEOManage_Remark"),
+                                RunMethod = (string)GetValue(SubKey, "IFEOManage_RunMethod") != "" ? (RunMethod)Enum.Parse(typeof(RunMethod), (string)GetValue(SubKey, "IFEOManage_RunMethod")) : RunMethod.Close,
+                            };
+                foreach (var item in items)
                 {
                     _FormatDebuggerStringAndUpdate(item);
                     Items.Add(item);

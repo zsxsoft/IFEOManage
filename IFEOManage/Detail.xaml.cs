@@ -27,7 +27,7 @@ namespace IFEOManage
                 _id = value;
                 if (IFEO.Items.Count > value && value != -1)
                 {
-                    
+
                     IFEOItem Item = IFEO.Items[_id];
                     PEPath = Item.PEName;
                     DebuggerPath = Item.Debugger;
@@ -166,7 +166,7 @@ namespace IFEOManage
         {
             PropertyChanged?.Invoke(this, e);
         }
-        
+
     }
 
     /// <summary>

@@ -11,7 +11,8 @@ namespace IFEOExecution
     /// </summary>
     public partial class MainWindow : Window
     {
-        private string ArgumentString {
+        private string ArgumentString
+        {
             get; set;
         }
         private DispatcherTimer Timer = null;

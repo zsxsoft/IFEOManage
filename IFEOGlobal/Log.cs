@@ -28,7 +28,8 @@ namespace IFEOGlobal
         /// </summary>
         /// <param name="StringText">The string text.</param>
         /// <param name="DisplayInConsole">if set to <c>true</c> [display in console].</param>
-        public static void WriteLine(string StringText, bool DisplayInConsole = false) {
+        public static void WriteLine(string StringText, bool DisplayInConsole = false)
+        {
             if (DisplayInConsole)
             {
                 Console.WriteLine(StringText);

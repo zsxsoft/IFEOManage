@@ -25,7 +25,7 @@ namespace IFEOGlobal
             FileStream Fs = File.Open(System.AppDomain.CurrentDomain.BaseDirectory + "\\Config.json", FileMode.Open);
             Data = (ConfigObject)Serializer.ReadObject(Fs);
             return true;
-        } 
+        }
 
         public static bool Save()
         {
