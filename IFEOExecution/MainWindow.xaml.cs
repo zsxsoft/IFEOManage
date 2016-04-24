@@ -23,12 +23,15 @@ namespace IFEOExecution
             // Check is administrator
             if (Global.IsAdministrator())
             {
-                this.Title += "(" + (string)FindResource("Administrator") + ")";
+                Title += $"({(string)FindResource("Administrator")})";
             }
             ArgumentString = string.Join(" ", App.Arguments);
             TxtArgumentString.Text = ArgumentString; // Don't need data binging here.
-            Timer = new System.Windows.Threading.DispatcherTimer();
-            Timer.Tick += new EventHandler(delegate
+            Timer = new DispatcherTimer
+            {
+                Interval = new TimeSpan(0, 0, 1)
+            };
+            Timer.Tick += (o, e) =>
             {
                 RemainTime--;
                 if (RemainTime == 0)
@@ -36,8 +39,7 @@ namespace IFEOExecution
                     Environment.Exit(0);
                 }
                 TxtTimerUpdate.Text = (string)FindResource("txtClosingTime") + " " + RemainTime;
-            });
-            Timer.Interval = new TimeSpan(0, 0, 1);
+            };
             Timer.Start();
         }
 
@@ -45,7 +47,7 @@ namespace IFEOExecution
         {
             string ProcessName = App.Arguments[0];
             string ProcessArgument = string.Join(" ", App.Arguments.Skip(1));
-            IFEOGlobal.Launcher.CreateProcess(ProcessName, ProcessArgument);
+            Launcher.CreateProcess(ProcessName, ProcessArgument);
             Environment.Exit(0);
         }
 

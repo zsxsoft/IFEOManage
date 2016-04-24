@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Windows;
@@ -28,8 +27,7 @@ namespace IFEOManage
 
         private void mnuAdd_Click(object sender, RoutedEventArgs e)
         {
-            Window WindowDetail = new Detail();
-            WindowDetail.Show();
+            new Detail().Show();
         }
 
         private void mnuRefresh_Click(object sender, RoutedEventArgs e)
@@ -40,33 +38,29 @@ namespace IFEOManage
         private void mnuModify_Click(object sender, RoutedEventArgs e)
         {
             if (listView.SelectedIndex == -1) return;
-            List<IFEOItem> Items = listView.SelectedItems.Cast<IFEOItem>().ToList();
-            Items.ForEach(delegate (IFEOItem Item)
+            var Items = listView.SelectedItems.Cast<IFEOItem>();
+            foreach(var Item in Items)
             {
                 Detail WindowDetail = new Detail();
                 WindowDetail.Data.ID = IFEO.Items.IndexOf(Item);
                 WindowDetail.Show();
-            });
+            }
         }
 
         private void mnuDelete_Click(object sender, RoutedEventArgs e)
         {
             if (listView.SelectedIndex == -1) return;
-            List<int> SelectedItems = new List<int>();
-            List<IFEOItem> Items = listView.SelectedItems.Cast<IFEOItem>().ToList();
-
-            MessageBoxResult Result = MessageBox.Show((string)FindResource("msgConfirm"), this.Title, MessageBoxButton.YesNo, MessageBoxImage.Question, MessageBoxResult.No);
-
+            var Items = listView.SelectedItems.Cast<IFEOItem>();
+            MessageBoxResult Result = MessageBox.Show((string)FindResource("msgConfirm"), Title, MessageBoxButton.YesNo, MessageBoxImage.Question, MessageBoxResult.No);
             if (Result == MessageBoxResult.Yes)
             {
                 IFEO.Delete(Items);
             }
-
         }
 
         private void Window_Closed(object sender, EventArgs e)
         {
-            System.Environment.Exit(0);
+            Environment.Exit(0);
         }
 
         private void AuthorHyperLink_RequestNavigate(object sender, RequestNavigateEventArgs e)
@@ -87,12 +81,14 @@ namespace IFEOManage
         private void mnuExport_Click(object sender, RoutedEventArgs e)
         {
             if (listView.SelectedIndex == -1) return;
-            Microsoft.Win32.SaveFileDialog ofd = new Microsoft.Win32.SaveFileDialog();
-            ofd.DefaultExt = ".reg";
-            ofd.Filter = "Importing Registration Entries|*.reg";
+            Microsoft.Win32.SaveFileDialog ofd = new Microsoft.Win32.SaveFileDialog
+            {
+                DefaultExt = ".reg",
+                Filter = "Importing Registration Entries|*.reg"
+            };
             if (ofd.ShowDialog() != true) return;
             if (ofd.FileName == "") return;
-            List<IFEOItem> Items = listView.SelectedItems.Cast<IFEOItem>().ToList();
+            var Items = listView.SelectedItems.Cast<IFEOItem>();
             IFEO.Export(Items, ofd.FileName);
         }
 

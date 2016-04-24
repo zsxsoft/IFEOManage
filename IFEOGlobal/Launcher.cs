@@ -1,19 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.IO;
-using System.Linq;
 using System.Runtime.InteropServices;
-using System.Security;
-using System.Security.Permissions;
 using System.Text;
-using System.Windows;
 
 namespace IFEOGlobal
 {
     public class Launcher
     {
-        [System.Runtime.InteropServices.StructLayout(LayoutKind.Sequential)]
+        [StructLayout(LayoutKind.Sequential)]
         public class SECURITY_ATTRIBUTES
         {
             public int nLength;
@@ -119,7 +113,7 @@ namespace IFEOGlobal
         public static void RestartWithAdministrator()
         {
 
-            String[] arguments = Environment.GetCommandLineArgs();
+            string[] arguments = Environment.GetCommandLineArgs();
             Debug.Assert(arguments != null && arguments.Length > 0);
             StringBuilder sb = new StringBuilder((arguments.Length - 1) * 16);
             for (int argumentIndex = 1; argumentIndex < arguments.Length - 1; argumentIndex++)
