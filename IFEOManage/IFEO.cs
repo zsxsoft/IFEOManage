@@ -46,11 +46,7 @@ namespace IFEOManage
             get
             {
                 string Extra = GetExtraRemarkString();
-                if (Extra != "")
-                {
-                    Extra += "; ";
-                }
-                return Extra + Remark;
+                return  Extra != "" ? $"{Extra};" : Extra +Remark;
             }
         }
 
@@ -102,14 +98,7 @@ namespace IFEOManage
             set
             {
                 if (_IFEOPath == value) return;
-                if (value == "")
-                {
-                    _IFEOPath = System.AppDomain.CurrentDomain.SetupInformation.ApplicationBase;
-                }
-                else
-                {
-                    _IFEOPath = value;
-                }
+                _IFEOPath = value == "" ? AppDomain.CurrentDomain.SetupInformation.ApplicationBase : value;
             }
         }
 
@@ -131,7 +120,7 @@ namespace IFEOManage
                 {
                     DebuggerFile = Debugger;
                 }
-                if (!System.IO.File.Exists(DebuggerFile))
+                if (!File.Exists(DebuggerFile))
                 {
                     Ret.Add((string)Application.Current.FindResource("cfmNotFound"));
                 }
@@ -150,7 +139,7 @@ namespace IFEOManage
             }
 
 
-            return String.Join("; ", Ret);
+            return string.Join("; ", Ret);
         }
 
         public override string ToString()
@@ -223,46 +212,27 @@ namespace IFEOManage
         {
             Log.WriteLine("Load registry");
             IFEOKey = Registry.LocalMachine.OpenSubKey(Global.IFEORegPath, true);
-            IFEOItem TempIFEO;
             if (IFEOKey != null)
             {
                 Items.Clear();
-                foreach (string keyName in IFEOKey.GetSubKeyNames())
+                var items = from keyName in IFEOKey.GetSubKeyNames()
+                let SubKey = IFEOKey.OpenSubKey(keyName, true)
+                where SubKey != null
+                where SubKey.GetValueNames().ToList().ConvertAll(d => d.ToLower()).IndexOf("debugger") > -1
+                select new IFEOItem
                 {
-                    RegistryKey SubKey = IFEOKey.OpenSubKey(keyName, true);
-                    if (SubKey != null)
-                    {
-                        if (SubKey.GetValueNames().ToList().ConvertAll(d => d.ToLower()).IndexOf("debugger") > -1)
-                        {
-                            TempIFEO = new IFEOItem();
-                            TempIFEO.ManageByThis = ((string)GetValue(SubKey, "IFEOManage_Manage") == "True");
-                            TempIFEO.RegKey = SubKey;
-                            TempIFEO.IFEOPath = (string)GetValue(SubKey, "IFEOManage_Path");
-                            TempIFEO.PEName = SubKey.Name.Split('\\').Last();
-                            TempIFEO.Debugger = SubKey.GetValue("Debugger").ToString();
-                            TempIFEO.Remark = (string)GetValue(SubKey, "IFEOManage_Remark");
-
-                            string RunMethodString = (string)GetValue(SubKey, "IFEOManage_RunMethod");
-                            if (RunMethodString != "")
-                            {
-                                TempIFEO.RunMethod = (RunMethod)Enum.Parse(TempIFEO.RunMethod.GetType(), RunMethodString);
-                            }
-
-                            _FormatDebuggerStringAndUpdate(TempIFEO);
-                            Items.Add(TempIFEO);
-                            Log.WriteLine("Load " + keyName + " successfully: " + TempIFEO.ToString());
-                        }
-                        else
-                        {
-                            //Log.WriteLine(keyName + " is not a vaild key.");
-                        }
-
-                    }
-                    else
-                    {
-                        Log.WriteLine("Error when loading Sub Key(" + keyName + ")");
-                        Log.MessageBoxError((string)Application.Current.FindResource("cfmOpenSubKeyError") + "\n" + keyName);
-                    }
+                    ManageByThis = ((string)GetValue(SubKey, "IFEOManage_Manage") == "True"),
+                    RegKey = SubKey,
+                    IFEOPath = (string)GetValue(SubKey, "IFEOManage_Path"),
+                    PEName = SubKey.Name.Split('\\').Last(),
+                    Debugger = SubKey.GetValue("Debugger").ToString(),
+                    Remark = (string)GetValue(SubKey, "IFEOManage_Remark"),
+                    RunMethod= (string)GetValue(SubKey, "IFEOManage_RunMethod")!="" ? (RunMethod)Enum.Parse(GetType(), (string)GetValue(SubKey, "IFEOManage_RunMethod")) : RunMethod.Close,
+                };
+                foreach(var item in items)
+                {
+                    _FormatDebuggerStringAndUpdate(item);
+                    Items.Add(item);
                 }
             }
             else
@@ -281,12 +251,12 @@ namespace IFEOManage
         /// </summary>
         /// <param name="DeleteList">The deletion list.</param>
         /// <returns>The state of deletion</returns>
-        public bool Delete(List<IFEOItem> DeleteList)
+        public bool Delete(IEnumerable<IFEOItem> DeleteList)
         {
 
             if (IFEOKey != null)
             {
-                DeleteList.ForEach(delegate (IFEOItem Item)
+                foreach (var Item in Items)
                 {
                     try
                     {
@@ -297,7 +267,7 @@ namespace IFEOManage
                         Log.WriteLine("Error when deleting item: " + Item.PEName + "\n\n" + Ex.ToString());
                         Log.MessageBoxError((string)Application.Current.FindResource("cfmDeleteError") + "\n" + Item.PEName + "\n\n" + Ex.ToString());
                     }
-                });
+                }
             }
             Load();
             return true;
@@ -308,11 +278,11 @@ namespace IFEOManage
         /// </summary>
         /// <param name="DeleteIDList">The deletion identifier list.</param>
         /// <returns>The state of deletion</returns>
-        public bool Delete(List<int> DeleteIDList)
+        public bool Delete(IEnumerable<int> DeleteIDList)
         {
             if (IFEOKey != null)
             {
-                DeleteIDList.ForEach(delegate (int Item)
+                foreach (var Item in DeleteIDList)
                 {
                     try
                     {
@@ -323,7 +293,7 @@ namespace IFEOManage
                         Log.WriteLine("Error when deleting item: " + Items[Item].PEName + "\n\n" + Ex.ToString());
                         Log.MessageBoxError((string)Application.Current.FindResource("cfmDeleteError") + "\n" + Items[Item].PEName + "\n\n" + Ex.ToString());
                     }
-                });
+                }
             }
             Load();
             return true;
@@ -387,22 +357,24 @@ namespace IFEOManage
         /// </summary>
         /// <param name="Items">The items.</param>
         /// <param name="OutputFile">The output file.</param>
-        public void Export(List<IFEOItem> Items, string OutputFile)
+        public void Export(IEnumerable<IFEOItem> Items, string OutputFile)
         {
-            List<string> RegKey = new List<string>();
-            RegKey.Add("Windows Registry Editor Version 5.00");
-            Items.ForEach(delegate (IFEOItem Item)
+            List<string> RegKey = new List<string>
             {
-                string RegFileName = "Temp_" + Item.PEName + ".reg";
-                ProcessStartInfo Start = new ProcessStartInfo();
-                Start.FileName = "regedit.exe";
-                Start.Arguments = "/e " + "\"" + RegFileName + "\" " + " \"HKEY_LOCAL_MACHINE\\" + Global.IFEORegPath + Item.PEName + "\"";
-                Process RegProcess = Process.Start(Start);
-                RegProcess.WaitForExit();
-
+            "Windows Registry Editor Version 5.00"
+            };
+            foreach (var Item in Items)
+            {
+                string RegFileName = $"Temp_{Item.PEName}.reg";
+                Process.Start(new ProcessStartInfo
+                {
+                    FileName = "regedit.exe",
+                    Arguments = $"/e \"{ RegFileName }\" \"HKEY_LOCAL_MACHINE\\{Global.IFEORegPath}{Item.PEName }\""
+                })
+                .WaitForExit();
                 RegKey.Add(File.ReadAllText(RegFileName).Replace("Windows Registry Editor Version 5.00", ""));
                 File.Delete(RegFileName);
-            });
+            }
             File.WriteAllText(OutputFile, string.Join(Environment.NewLine, RegKey));
         }
     }

@@ -192,22 +192,17 @@ namespace IFEOManage
         public Detail()
         {
             InitializeComponent();
-            Fuck.DataContext = Data;
+            grid.DataContext = Data;
             InitializeData();
-            //txtDebugger.DataContext = Data;
-            //txtPEName.DataContext = Data;
-            //txtRemark.DataContext = Data;
-            //btnOpenPESelector.DataContext = Data;
-            //chkManageByThis.DataContext = Data;
-            //RadioStartup1.DataContext = Data;
-            //RadioStartup2.DataContext = Data;
         }
 
         private void btnOpenPESelector_Click(object sender, RoutedEventArgs e)
         {
-            Microsoft.Win32.OpenFileDialog ofd = new Microsoft.Win32.OpenFileDialog();
-            ofd.DefaultExt = ".exe";
-            ofd.Filter = "Execution File|*.exe";
+            Microsoft.Win32.OpenFileDialog ofd = new Microsoft.Win32.OpenFileDialog
+            {
+                DefaultExt = ".exe",
+                Filter = "Execution File|*.exe"
+            };
             if (ofd.ShowDialog() == true)
             {
                 if (ofd.FileName != "")
@@ -220,9 +215,11 @@ namespace IFEOManage
 
         private void btnOpenDebuggerSelector_Click(object sender, RoutedEventArgs e)
         {
-            Microsoft.Win32.OpenFileDialog ofd = new Microsoft.Win32.OpenFileDialog();
-            ofd.DefaultExt = ".exe";
-            ofd.Filter = "Execution File|*.exe";
+            Microsoft.Win32.OpenFileDialog ofd = new Microsoft.Win32.OpenFileDialog
+            {
+                DefaultExt = ".exe",
+                Filter = "Execution File|*.exe"
+            };
             if (ofd.ShowDialog() == true)
             {
                 if (ofd.FileName != "")
@@ -243,21 +240,15 @@ namespace IFEOManage
         private void btnSave_Click(object sender, RoutedEventArgs e)
         {
             Data.PEPath = Data.PEPath.Trim();
-            if (Data.PEPath == "") return;
-            IFEOItem Item = new IFEOItem();
-
-            Item.ManageByThis = Data.ManageByThis;
-            if (Data.ManageByThis)
+            if (string.IsNullOrEmpty(Data.PEPath)) return;
+            IFEOItem Item = new IFEOItem
             {
-                Item.Debugger = "\"" + Global.IFEOExecution + "\"";
-            } else
-            {
-                Item.Debugger = Data.DebuggerPath;
-            }
-            
-            Item.PEName = Data.PEPath;
-            Item.Remark = Data.Remark;
-            Item.RunMethod = Data.RunMethod;
+                ManageByThis = Data.ManageByThis,
+                Debugger = Data.ManageByThis ? $@""" { Global.IFEOExecution } """ : Data.DebuggerPath,
+                PEName = Data.PEPath,
+                Remark = Data.Remark,
+                RunMethod = Data.RunMethod
+            };
             IFEO.Save(Item);
             InitializeData(); // Refresh it
         }

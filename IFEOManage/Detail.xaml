@@ -13,7 +13,7 @@
         <local:EnumBooleanConverter x:Key="EnumBooleanConverter" />
         <local:HasNotKeyConverter x:Key="HasNotKeyConverter" />
     </Window.Resources>
-    <Grid x:Name="Fuck">
+    <Grid x:Name="grid">
         <Grid.RowDefinitions>
             <RowDefinition></RowDefinition>
             <RowDefinition></RowDefinition>
